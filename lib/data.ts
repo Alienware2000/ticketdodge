@@ -1,4 +1,5 @@
 import rawViolations from "@/data/violations.json";
+import rawDataSource from "@/data/source.json";
 
 export type ViolationEntry = {
   street: string;
@@ -12,6 +13,7 @@ export type ViolationEntry = {
 };
 
 export const violations: ViolationEntry[] = rawViolations;
+export const dataSource = rawDataSource;
 
 const days = [
   "Sunday",

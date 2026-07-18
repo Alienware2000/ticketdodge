@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "data:refresh": "node scripts/fetch-nyc-data.mjs"
   },
   "dependencies": {
     "leaflet": "^1.9.4",

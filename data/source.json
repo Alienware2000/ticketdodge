@@ -1,0 +1,9 @@
+{
+  "dataset": "Parking Violations Issued - Fiscal Year 2026",
+  "datasetId": "pvqr-7yc4",
+  "datasetUrl": "https://data.cityofnewyork.us/d/pvqr-7yc4",
+  "fineScheduleUrl": "https://www.nyc.gov/site/finance/vehicles/services-violation-codes.page",
+  "precinct": 13,
+  "pulledAt": "2026-07-18T16:12:01.762Z",
+  "methodology": "Street-level FY2026 ticket totals, peak weekday/hour, and most common violation for eight Flatiron-area streets in Precinct 13. Coordinates are representative map points. Risk scoring remains a heuristic."
+}

@@ -38,6 +38,10 @@ input {
   font-family: inherit;
 }
 
+.leaflet-tile-pane {
+  filter: saturate(0.74) contrast(0.94) brightness(1.04);
+}
+
 .leaflet-control-attribution {
   margin-right: 430px !important;
   border-radius: 8px 0 0 0;
@@ -149,13 +153,31 @@ input {
   );
 }
 
+.risk-panel {
+  scrollbar-color: rgb(255 255 255 / 18%) transparent;
+  scrollbar-width: thin;
+}
+
+.risk-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.risk-panel::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(255 255 255 / 16%);
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .leaflet-control-attribution {
     display: none;
   }
 
   .leaflet-bottom {
-    bottom: 46vh;
+    bottom: 54vh;
   }
 
   .leaflet-control-zoom {
