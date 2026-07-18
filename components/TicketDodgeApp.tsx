@@ -510,7 +510,7 @@ export default function TicketDodgeApp() {
             ))}
           </div>
           <p className="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-500">Current curb: {currentOption.availability}% estimated open · {currentOption.restriction}. ${currentOption.totalExpectedCost.toFixed(0)} = ${currentOption.meterCost.toFixed(0)} meter + ${currentOption.expectedTicketCost.toFixed(0)} ticket risk + ${currentOption.expectedTowCost.toFixed(0)} tow exposure + walking/search time.</p>
-          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability combines historical citation activity with a meter-occupancy proxy.{parkingContext ? ` Live inputs: ${parkingContext.weather.temperatureF ?? "—"}°F, ${parkingContext.traffic.medianMph ?? "—"} mph traffic, ${parkingContext.events.activeOrUpcoming} active Manhattan events.` : " Loading live weather, traffic, and event inputs…"}</p>
+          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability combines historical citation activity with a meter-occupancy proxy.{parkingContext ? ` Live inputs: ${parkingContext.weather.temperatureF ?? "—"}°F, ${parkingContext.traffic.medianMph ?? "—"} mph traffic, ${parkingContext.events.activeOrUpcoming} active Manhattan events${parkingContext.sources.parking === "here" ? `, and ${parkingContext.parking.nearbyFacilities} HERE parking facilities nearby.` : "."}` : " Loading live weather, traffic, event, and parking inputs…"}</p>
         </section>
 
         <details className="mt-3 rounded-2xl border border-white/10 bg-black/10 px-4 py-3">

@@ -1,4 +1,4 @@
-type ProviderName = "open-meteo" | "nyc-dot" | "nyc-open-data";
+type ProviderName = "open-meteo" | "nyc-dot" | "nyc-open-data" | "here-parking";
 type ProviderStatus = "live" | "no-data" | "unavailable";
 
 export type ProviderMeta = {
@@ -32,21 +32,27 @@ export type ParkingContext = {
   events: {
     activeOrUpcoming: number;
   };
+  parking: {
+    nearbyFacilities: number;
+    reportedFreeSpaces: number | null;
+  };
   // Kept as a compact, backwards-compatible provider summary for the UI.
   sources: {
     weather: "open-meteo" | "unavailable";
     traffic: "nyc-dot" | "unavailable";
     events: "nyc-open-data" | "unavailable";
+    parking: "here" | "unavailable";
   };
   provenance: {
     weather: ProviderMeta;
     traffic: ProviderMeta;
     events: ProviderMeta;
+    parking: ProviderMeta;
   };
   quality: {
     status: "live" | "degraded" | "unavailable";
     liveProviders: number;
-    totalProviders: 3;
+    totalProviders: 4;
   };
 };
 
@@ -164,6 +170,47 @@ async function getEvents() {
   return { value: active, dataAsOf: null, records: data.length };
 }
 
+async function getHereParking() {
+  const token = process.env.HERE_ACCESS_TOKEN;
+  if (!token) throw new ProviderError("network");
+  const url = new URL("https://parking-v2.cc.api.here.com/parking/facilities.json");
+  url.searchParams.set("prox", `${FLATIRON.lat},${FLATIRON.lng},1000`);
+  url.searchParams.set("maxresults", "20");
+  url.searchParams.set("sortkey", "parking_space_free");
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  let response: Response;
+  try {
+    response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, next: { revalidate: 120 }, signal: controller.signal });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") throw new ProviderError("timeout");
+    throw new ProviderError("network");
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!response.ok) throw new ProviderError("http_error");
+  let data: unknown;
+  try { data = await response.json(); } catch { throw new ProviderError("invalid_payload"); }
+  const records: unknown[] = [];
+  const freeSpaces: number[] = [];
+  const visit = (value: unknown, key = "") => {
+    if (Array.isArray(value)) { value.forEach((item) => visit(item, key)); return; }
+    if (!value || typeof value !== "object") return;
+    Object.entries(value).forEach(([childKey, childValue]) => {
+      if (Array.isArray(childValue) && /facilit/i.test(childKey)) records.push(...childValue);
+      if (typeof childValue === "number" && /parking.*(free|available)|free.*parking/i.test(childKey)) freeSpaces.push(childValue);
+      visit(childValue, childKey);
+    });
+  };
+  visit(data);
+  if (!records.length && !freeSpaces.length) throw new ProviderError("invalid_payload");
+  return {
+    value: { nearbyFacilities: records.length, reportedFreeSpaces: freeSpaces.length ? freeSpaces.reduce((sum, value) => sum + value, 0) : null },
+    dataAsOf: null,
+    records: Math.max(records.length, freeSpaces.length),
+  };
+}
+
 function unavailableMeta(provider: ProviderName, refreshSeconds: number, fetchedAt: string, error: unknown): ProviderMeta {
   return {
     provider, status: "unavailable", fetchedAt, dataAsOf: null, refreshSeconds, responseMs: null, records: null,
@@ -190,20 +237,22 @@ async function capture<T>(provider: ProviderName, refreshSeconds: number, operat
 
 /** Fetches live exogenous features. Provider failures are isolated and explicitly documented. */
 export async function getParkingContext(): Promise<ParkingContext> {
-  const [weather, traffic, events] = await Promise.all([
+  const [weather, traffic, events, parking] = await Promise.all([
     capture("open-meteo", 300, getWeather),
     capture("nyc-dot", 120, getTraffic),
     capture("nyc-open-data", 300, getEvents),
+    capture("here-parking", 120, getHereParking),
   ]);
-  const liveProviders = [weather.meta, traffic.meta, events.meta].filter((meta) => meta.status === "live" || meta.status === "no-data").length;
+  const liveProviders = [weather.meta, traffic.meta, events.meta, parking.meta].filter((meta) => meta.status === "live" || meta.status === "no-data").length;
   return {
     schemaVersion: "1.1",
     observedAt: new Date().toISOString(),
     weather: weather.value ?? { temperatureF: null, precipitationInches: null, weatherCode: null, precipitationProbability: null },
     traffic: traffic.value ?? { medianMph: null, sampledLinks: 0 },
     events: { activeOrUpcoming: events.value ?? 0 },
-    sources: { weather: weather.value ? "open-meteo" : "unavailable", traffic: traffic.value ? "nyc-dot" : "unavailable", events: events.value !== null ? "nyc-open-data" : "unavailable" },
-    provenance: { weather: weather.meta, traffic: traffic.meta, events: events.meta },
-    quality: { status: liveProviders === 3 ? "live" : liveProviders === 0 ? "unavailable" : "degraded", liveProviders, totalProviders: 3 },
+    parking: parking.value ?? { nearbyFacilities: 0, reportedFreeSpaces: null },
+    sources: { weather: weather.value ? "open-meteo" : "unavailable", traffic: traffic.value ? "nyc-dot" : "unavailable", events: events.value !== null ? "nyc-open-data" : "unavailable", parking: parking.value ? "here" : "unavailable" },
+    provenance: { weather: weather.meta, traffic: traffic.meta, events: events.meta, parking: parking.meta },
+    quality: { status: liveProviders === 4 ? "live" : liveProviders === 0 ? "unavailable" : "degraded", liveProviders, totalProviders: 4 },
   };
 }
