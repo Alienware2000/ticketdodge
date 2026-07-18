@@ -22,7 +22,9 @@ import {
 import type { ParkingContext } from "@/lib/parking-context";
 
 const FLATIRON = { lat: 40.7411, lng: -73.9897 };
-const durationOptions = [30, 60, 120];
+/** Overnight is modeled as a 12-hour curb stay (typical evening → morning). */
+const OVERNIGHT_MINUTES = 12 * 60;
+const durationOptions = [30, 60, 120, 5 * 60, OVERNIGHT_MINUTES];
 
 function formatHour(hour: number) {
   const normalized = hour % 24;
@@ -42,18 +44,27 @@ function getRiskStyle(score: number) {
 }
 
 function formatDuration(durationMinutes: number) {
+  if (durationMinutes === OVERNIGHT_MINUTES) return "Overnight";
   if (durationMinutes < 60) return `${durationMinutes} min`;
+  if (durationMinutes === 60) return "1 hr";
   return `${durationMinutes / 60} hr`;
 }
 
-function getRecommendation(score: number, safeUntil: string) {
+function getRecommendation(score: number, safeUntil: string, durationMinutes: number) {
+  const isOvernight = durationMinutes >= OVERNIGHT_MINUTES;
   if (score > 66) {
-    return `Move by ${safeUntil} — enforcement is heavy on this block.`;
+    return isOvernight
+      ? `Heavy historical enforcement—overnight here is a stretch. Recheck by ${safeUntil}.`
+      : `Move by ${safeUntil} — enforcement is heavy on this block.`;
   }
   if (score >= 34) {
-    return `Recheck by ${safeUntil}, or choose the safer block below.`;
+    return isOvernight
+      ? `Recheck before morning enforcement (by ${safeUntil}), or choose the safer block below.`
+      : `Recheck by ${safeUntil}, or choose the safer block below.`;
   }
-  return `Risk stays relatively low through ${safeUntil}.`;
+  return isOvernight
+    ? `Historical enforcement is relatively lower for an overnight stay through ${safeUntil}.`
+    : `Risk stays relatively low through ${safeUntil}.`;
 }
 
 export default function TicketDodgeApp() {
@@ -164,11 +175,17 @@ export default function TicketDodgeApp() {
   );
   const riskStyle = getRiskStyle(score);
   const safeMinutes =
-    score > 66
-      ? Math.min(durationMinutes, 30)
-      : score >= 34
-        ? Math.min(durationMinutes, 60)
-        : durationMinutes;
+    durationMinutes >= OVERNIGHT_MINUTES
+      ? score > 66
+        ? 6 * 60
+        : score >= 34
+          ? 9 * 60
+          : durationMinutes
+      : score > 66
+        ? Math.min(durationMinutes, 30)
+        : score >= 34
+          ? Math.min(durationMinutes, Math.max(60, Math.round(durationMinutes * 0.4)))
+          : durationMinutes;
   const arrivalTime = new Date(now);
   arrivalTime.setHours(arrivalHour, 0, 0, 0);
   const safeUntil = new Date(arrivalTime.getTime() + safeMinutes * 60_000).toLocaleTimeString(
@@ -176,7 +193,7 @@ export default function TicketDodgeApp() {
     { hour: "numeric", minute: "2-digit" },
   );
   const confidence = getConfidence(selected.count);
-  const recommendation = getRecommendation(score, safeUntil);
+  const recommendation = getRecommendation(score, safeUntil, durationMinutes);
   const decisionSignals = [
     {
       label: "Citation pattern",
@@ -194,7 +211,6 @@ export default function TicketDodgeApp() {
       note: "Estimated from local activity patterns",
     },
   ];
-
   function selectStreet(value: string, announce = true) {
     const match = findStreet(value);
     if (!match) {
@@ -361,7 +377,7 @@ export default function TicketDodgeApp() {
             <span>How long are you parking?</span>
             <span className="normal-case tracking-normal text-slate-600">Changes your estimate</span>
           </legend>
-          <div className="mt-2 grid grid-cols-3 gap-2 rounded-2xl bg-white/[0.06] p-1.5">
+          <div className="mt-2 grid grid-cols-3 gap-1.5 rounded-2xl bg-white/[0.06] p-1.5 sm:grid-cols-5">
             {durationOptions.map((minutes) => {
               const selectedDuration = minutes === durationMinutes;
               return (
@@ -370,7 +386,7 @@ export default function TicketDodgeApp() {
                   type="button"
                   aria-pressed={selectedDuration}
                   onClick={() => setDurationMinutes(minutes)}
-                  className={`rounded-xl px-3 py-2 text-xs font-bold transition focus:outline-none focus:ring-2 focus:ring-[#ff5a3c] ${
+                  className={`rounded-xl px-2 py-2 text-[11px] font-bold transition focus:outline-none focus:ring-2 focus:ring-[#ff5a3c] sm:text-xs ${
                     selectedDuration
                       ? "bg-white text-[#101828] shadow-sm"
                       : "text-slate-400 hover:bg-white/5 hover:text-white"
@@ -427,7 +443,11 @@ export default function TicketDodgeApp() {
               </span>
             </div>
             <p className="mt-2 max-w-[210px] text-xs leading-relaxed text-slate-400 md:text-sm">
-              Estimated exposure for a {formatDuration(durationMinutes).toLowerCase()} stay.
+              Relative exposure for{" "}
+              {durationMinutes === OVERNIGHT_MINUTES
+                ? "an overnight"
+                : `a ${formatDuration(durationMinutes).toLowerCase()}`}{" "}
+              stay—not a ticket probability.
             </p>
           </div>
           </div>
