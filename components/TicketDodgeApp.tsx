@@ -198,14 +198,14 @@ export default function TicketDodgeApp() {
   function selectStreet(value: string, announce = true) {
     const match = findStreet(value);
     if (!match) {
-      if (announce) setSearchMessage("Try Broadway, 5th Ave, E 18th St, or Park Ave S.");
+      if (announce) setSearchMessage("Try a Flatiron destination like Broadway, 5th Ave, E 18th St, or Park Ave S.");
       return false;
     }
 
     userInteracted.current = true;
     setLocation({ lat: match.lat, lng: match.lng });
     setQuery(match.street);
-    setSearchMessage(announce ? `Showing ${match.street}` : "");
+    setSearchMessage(announce ? `Destination set: ${match.street}` : "");
     return true;
   }
 
@@ -227,7 +227,7 @@ export default function TicketDodgeApp() {
     userInteracted.current = true;
     setLocation(nextLocation);
     setQuery("");
-    setSearchMessage("Map point selected");
+    setSearchMessage("Destination point selected");
   }
 
   function handleOptionSelect(street: string) {
@@ -236,7 +236,7 @@ export default function TicketDodgeApp() {
     userInteracted.current = true;
     setLocation({ lat: alternative.entry.lat, lng: alternative.entry.lng });
     setQuery(alternative.entry.street);
-    setSearchMessage(`Showing recommendation: ${alternative.entry.street}`);
+    setSearchMessage(`Recommended parking: ${alternative.entry.street} · ${alternative.blocksAway} block walk to your destination`);
   }
 
   function handleUseMyLocation() {
@@ -298,14 +298,14 @@ export default function TicketDodgeApp() {
             <span className="absolute bottom-0 right-0 h-1.5 w-0.5 rotate-[-45deg] rounded-full bg-slate-400" />
           </span>
           <label htmlFor="street-search" className="sr-only">
-            Search a Flatiron street
+            Where are you going?
           </label>
           <input
             id="street-search"
             list="street-options"
             value={query}
             onChange={(event) => handleQueryChange(event.target.value)}
-            placeholder="Try Broadway or 5th Ave"
+            placeholder="Where are you going? Try Broadway"
             autoComplete="off"
             className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none placeholder:font-medium placeholder:text-slate-400"
           />
@@ -318,12 +318,12 @@ export default function TicketDodgeApp() {
             type="submit"
             className="rounded-xl bg-[#101828] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-[#ff5a3c] focus:ring-offset-2"
           >
-            Check curb
+            Plan parking
           </button>
         </div>
         <div className="mt-2 flex min-h-8 items-center justify-between gap-2 pl-2">
           <p className="rounded-full bg-white/85 px-3 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm backdrop-blur" aria-live="polite">
-            {searchMessage || "Search a street or tap a curb on the map."}
+            {searchMessage || "Enter your destination, then we’ll find the best place to park nearby."}
           </p>
           {userLocation ? (
             <button
@@ -346,10 +346,10 @@ export default function TicketDodgeApp() {
         <header className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#ff9d8b]">
-              Your parking plan
+              Your destination
             </p>
             <h1 className="mt-1 text-lg font-bold tracking-tight md:text-xl">{selected.street}</h1>
-            <p className="mt-1 text-xs text-slate-500">Selected curb near Flatiron</p>
+            <p className="mt-1 text-xs text-slate-500">We’ll rank parking spots within your walking limit.</p>
           </div>
           <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
             {currentDay.slice(0, 3)} · {formatHour(arrivalHour)}
@@ -488,8 +488,8 @@ export default function TicketDodgeApp() {
 
         <section className="mt-3 rounded-2xl border border-white/10 bg-black/10 p-4">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xs font-bold text-white">Nearby curb ranking</h2>
-            <span className="text-[10px] font-semibold text-slate-500">all-in expected cost</span>
+            <h2 className="text-xs font-bold text-white">Best places to park nearby</h2>
+            <span className="text-[10px] font-semibold text-slate-500">walk + meter + exposure</span>
           </div>
           <div className="mt-3 space-y-2">
             {parkingOptions.slice(0, 3).map((option, index) => (
@@ -500,11 +500,11 @@ export default function TicketDodgeApp() {
                 className={`w-full rounded-xl px-3 py-2.5 text-left transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${option.entry.street === selected.street ? "bg-white/10" : "bg-white/[0.04] hover:bg-white/[0.08]"}`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="min-w-0"><span className="mr-2 text-[10px] font-black text-emerald-300">#{index + 1}</span><span className="text-xs font-bold text-white">{option.entry.street}</span></span>
+                  <span className="min-w-0"><span className="mr-2 text-[10px] font-black text-emerald-300">{index === 0 ? "BEST" : `#${index + 1}`}</span><span className="text-xs font-bold text-white">{option.entry.street}</span></span>
                   <span className="text-sm font-black text-emerald-300">${option.totalExpectedCost.toFixed(0)}</span>
                 </div>
                 <div className="mt-1 flex flex-wrap gap-x-3 text-[10px] font-semibold text-slate-500">
-                  <span>{option.availability}% open</span><span>{option.ticketRisk}% ticket risk</span><span>{option.blocksAway} blocks</span>
+                  <span>{option.blocksAway} block walk</span><span>{option.availability}% open</span><span>{option.ticketRisk}% ticket risk</span>
                 </div>
               </button>
             ))}
