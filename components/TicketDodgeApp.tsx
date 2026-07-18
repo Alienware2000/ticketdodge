@@ -293,12 +293,12 @@ export default function TicketDodgeApp() {
       </section>
 
       <div className="pointer-events-none absolute left-4 top-4 z-[1000] flex items-center gap-2 md:left-6 md:top-6">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#101828] text-lg font-black text-white shadow-[0_10px_30px_rgba(16,24,40,0.2)]">
+        <div className="grid h-12 w-12 place-items-center rounded-[18px] bg-[#2c1934] text-[24px] font-black text-[#f4e8c6] shadow-[0_10px_24px_rgba(81,42,67,0.24)]">
           P
         </div>
-        <div className="rounded-xl bg-white/95 px-3 py-2 shadow-[0_10px_30px_rgba(16,24,40,0.15)] backdrop-blur">
-          <p className="text-[15px] font-black tracking-[-0.04em] text-[#101828]">
-            ticket<span className="text-[#ff5a3c]">dodge</span>
+        <div className="rounded-[18px] border border-[#f4e8c6]/70 bg-[#fff8e8]/95 px-4 py-2.5 shadow-[0_10px_24px_rgba(81,42,67,0.16)] backdrop-blur">
+          <p className="text-[17px] font-black tracking-[-0.055em] text-[#2c1934]">
+            ticket<span className="text-[#d65d62]">dodge</span>
           </p>
         </div>
       </div>
