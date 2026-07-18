@@ -12,8 +12,13 @@ import {
   getConfidence,
   getRisk,
   getRiskBreakdown,
-  getSaferAlternative,
 } from "@/lib/score";
+import {
+  getCurrentParkingOption,
+  getParkingOptions,
+  getStopRecommendation,
+  type ParkingPreferences,
+} from "@/lib/planning";
 
 const FLATIRON = { lat: 40.7411, lng: -73.9897 };
 const durationOptions = [30, 60, 120];
@@ -59,6 +64,12 @@ export default function TicketDodgeApp() {
   const [query, setQuery] = useState("");
   const [searchMessage, setSearchMessage] = useState("");
   const [durationMinutes, setDurationMinutes] = useState(60);
+  const [preferences, setPreferences] = useState<ParkingPreferences>({
+    maxWalkBlocks: 4,
+    maxSearchMinutes: 8,
+    riskTolerance: "medium",
+    isInAHurry: false,
+  });
   const userInteracted = useRef(false);
 
   useEffect(() => {
@@ -124,16 +135,17 @@ export default function TicketDodgeApp() {
       ),
     [location, currentDay, currentHour, durationMinutes],
   );
-  const alternative = useMemo(
-    () =>
-      getSaferAlternative(
-        location.lat,
-        location.lng,
-        currentDay,
-        currentHour,
-        durationMinutes,
-      ),
-    [location, currentDay, currentHour, durationMinutes],
+  const parkingOptions = useMemo(
+    () => getParkingOptions(location.lat, location.lng, currentDay, currentHour, durationMinutes, preferences),
+    [location, currentDay, currentHour, durationMinutes, preferences],
+  );
+  const currentOption = useMemo(
+    () => getCurrentParkingOption(location.lat, location.lng, currentDay, currentHour, durationMinutes, preferences),
+    [location, currentDay, currentHour, durationMinutes, preferences],
+  );
+  const stopRecommendation = useMemo(
+    () => getStopRecommendation(currentOption, parkingOptions, preferences),
+    [currentOption, parkingOptions, preferences],
   );
   const riskStyle = getRiskStyle(score);
   const safeMinutes =
@@ -184,12 +196,13 @@ export default function TicketDodgeApp() {
     setSearchMessage("Map point selected");
   }
 
-  function handleAlternativeSelect() {
+  function handleOptionSelect(street: string) {
+    const alternative = parkingOptions.find((option) => option.entry.street === street);
     if (!alternative) return;
     userInteracted.current = true;
     setLocation({ lat: alternative.entry.lat, lng: alternative.entry.lng });
     setQuery(alternative.entry.street);
-    setSearchMessage(`Showing safer option: ${alternative.entry.street}`);
+    setSearchMessage(`Showing recommendation: ${alternative.entry.street}`);
   }
 
   function handleUseMyLocation() {
@@ -368,30 +381,62 @@ export default function TicketDodgeApp() {
           <p className="mt-1 text-sm font-bold leading-snug text-white md:text-base">{recommendation}</p>
         </div>
 
-        {alternative ? (
-          <button
-            type="button"
-            onClick={handleAlternativeSelect}
-            className="group mt-3 flex w-full items-center justify-between gap-4 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.07] px-4 py-3 text-left transition hover:-translate-y-0.5 hover:bg-emerald-400/[0.12] focus:outline-none focus:ring-2 focus:ring-emerald-400"
-          >
-            <span>
-              <span className="block text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-300">
-                Better option · {alternative.blocksAway} {alternative.blocksAway === 1 ? "block" : "blocks"} away
-              </span>
-              <span className="mt-1 block text-sm font-bold text-white">{alternative.entry.street}</span>
-              <span className="mt-1 block text-[11px] font-semibold text-slate-500 group-hover:text-slate-400">Tap to compare this curb</span>
+        <section className="mt-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.07] p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-300">Park or keep searching?</p>
+              <p className="mt-1 text-sm font-bold leading-snug text-white">{stopRecommendation.message}</p>
+            </div>
+            <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${stopRecommendation.shouldKeepSearching ? "bg-yellow-400/15 text-yellow-200" : "bg-emerald-400/15 text-emerald-300"}`}>
+              {stopRecommendation.shouldKeepSearching ? "Search" : "Park"}
             </span>
-            <span className="shrink-0 text-right">
-              <span className="block text-2xl font-black text-emerald-300">{alternative.score}</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500">risk →</span>
-            </span>
-          </button>
-        ) : (
-          <div className="mt-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.07] px-4 py-3">
-            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-300">Best sampled option</p>
-            <p className="mt-1 text-sm font-bold text-white">This is already the lowest-risk block in the demo area.</p>
           </div>
-        )}
+          <p className="mt-2 text-[10px] leading-relaxed text-slate-400">Optimal-stopping estimate: compares expected savings with the cost of another search loop.</p>
+        </section>
+
+        <section className="mt-3 rounded-2xl border border-white/10 bg-black/10 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-xs font-bold text-white">Nearby curb ranking</h2>
+            <span className="text-[10px] font-semibold text-slate-500">all-in expected cost</span>
+          </div>
+          <div className="mt-3 space-y-2">
+            {parkingOptions.slice(0, 3).map((option, index) => (
+              <button
+                key={option.entry.street}
+                type="button"
+                onClick={() => handleOptionSelect(option.entry.street)}
+                className={`w-full rounded-xl px-3 py-2.5 text-left transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${option.entry.street === selected.street ? "bg-white/10" : "bg-white/[0.04] hover:bg-white/[0.08]"}`}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0"><span className="mr-2 text-[10px] font-black text-emerald-300">#{index + 1}</span><span className="text-xs font-bold text-white">{option.entry.street}</span></span>
+                  <span className="text-sm font-black text-emerald-300">${option.totalExpectedCost.toFixed(0)}</span>
+                </div>
+                <div className="mt-1 flex flex-wrap gap-x-3 text-[10px] font-semibold text-slate-500">
+                  <span>{option.availability}% open</span><span>{option.ticketRisk}% ticket risk</span><span>{option.blocksAway} blocks</span>
+                </div>
+              </button>
+            ))}
+          </div>
+          <p className="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-500">Current curb: {currentOption.availability}% estimated open · {currentOption.restriction}. ${currentOption.totalExpectedCost.toFixed(0)} = ${currentOption.meterCost.toFixed(0)} meter + ${currentOption.expectedTicketCost.toFixed(0)} ticket risk + ${currentOption.expectedTowCost.toFixed(0)} tow exposure + walking/search time.</p>
+          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability blends historical citation activity with meter-occupancy, traffic, event, and weather uncertainty proxies; live feeds can replace these signals.</p>
+        </section>
+
+        <details className="mt-3 rounded-2xl border border-white/10 bg-black/10 px-4 py-3">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-xs font-bold text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a3c]">
+            Parking preferences
+            <span className="text-base text-slate-500" aria-hidden="true">⌄</span>
+          </summary>
+          <div className="mt-4 grid gap-3 border-t border-white/10 pt-4">
+            <label className="text-[11px] font-bold text-slate-300">Maximum walk: {preferences.maxWalkBlocks} blocks
+              <input aria-label="Maximum walking distance" className="mt-2 w-full accent-[#ff5a3c]" type="range" min="1" max="10" value={preferences.maxWalkBlocks} onChange={(event) => setPreferences((value) => ({ ...value, maxWalkBlocks: Number(event.target.value) }))} />
+            </label>
+            <label className="text-[11px] font-bold text-slate-300">Search-time limit: {preferences.maxSearchMinutes} min
+              <input aria-label="Search time limit" className="mt-2 w-full accent-[#ff5a3c]" type="range" min="2" max="20" step="1" value={preferences.maxSearchMinutes} onChange={(event) => setPreferences((value) => ({ ...value, maxSearchMinutes: Number(event.target.value) }))} />
+            </label>
+            <div><p className="text-[11px] font-bold text-slate-300">Ticket-risk tolerance</p><div className="mt-2 grid grid-cols-3 gap-1.5">{(["low", "medium", "high"] as const).map((tolerance) => <button key={tolerance} type="button" onClick={() => setPreferences((value) => ({ ...value, riskTolerance: tolerance }))} className={`rounded-lg px-2 py-1.5 text-[10px] font-bold capitalize ${preferences.riskTolerance === tolerance ? "bg-white text-[#101828]" : "bg-white/5 text-slate-400"}`}>{tolerance}</button>)}</div></div>
+            <button type="button" onClick={() => setPreferences((value) => ({ ...value, isInAHurry: !value.isInAHurry }))} aria-pressed={preferences.isInAHurry} className={`rounded-xl px-3 py-2 text-left text-[11px] font-bold ${preferences.isInAHurry ? "bg-[#ff5a3c] text-white" : "bg-white/5 text-slate-300"}`}>In a hurry {preferences.isInAHurry ? "· yes" : "· no"}</button>
+          </div>
+        </details>
 
         <section className="mt-4 rounded-2xl border border-white/10 bg-black/10 p-4">
           <div className="flex items-center justify-between">
