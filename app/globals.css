@@ -156,8 +156,45 @@ input {
 
 .risk-panel {
   background-color: #2c1934 !important;
+  isolation: isolate;
+  position: absolute;
   scrollbar-color: rgb(255 255 255 / 18%) transparent;
   scrollbar-width: thin;
+}
+
+.risk-panel::before,
+.risk-panel::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  display: block;
+  filter: blur(0.2px);
+}
+
+.risk-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.risk-panel::before {
+  top: -116px;
+  right: -122px;
+  height: 300px;
+  width: 315px;
+  border-radius: 58% 42% 67% 33% / 45% 54% 46% 55%;
+  background: radial-gradient(circle at 30% 62%, rgb(244 232 198 / 32%), rgb(229 142 112 / 18%) 48%, transparent 70%);
+  transform: rotate(-18deg);
+}
+
+.risk-panel::after {
+  bottom: 90px;
+  left: -155px;
+  height: 255px;
+  width: 280px;
+  border-radius: 38% 62% 44% 56% / 60% 38% 62% 40%;
+  background: linear-gradient(135deg, rgb(211 91 96 / 18%), rgb(244 232 198 / 12%));
+  transform: rotate(24deg);
 }
 
 .risk-panel .score-ring > div {
