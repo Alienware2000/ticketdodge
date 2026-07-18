@@ -23,7 +23,6 @@ type TicketMapProps = {
   userLocation: Location | null;
   selectedStreet: string;
   scoreColor: string;
-  heatmapPoints: { lat: number; lng: number; street: string; risk: number }[];
   onLocationSelect: (location: Location) => void;
 };
 
@@ -65,7 +64,6 @@ export default function TicketMap({
   userLocation,
   selectedStreet,
   scoreColor,
-  heatmapPoints,
   onLocationSelect,
 }: TicketMapProps) {
   return (
@@ -83,10 +81,6 @@ export default function TicketMap({
       <ZoomControl position="bottomleft" />
       <MapClickHandler onLocationSelect={onLocationSelect} />
       <FollowSelection location={location} />
-      {heatmapPoints.map((point) => {
-        const color = point.risk > 66 ? "#ff5a3c" : point.risk >= 34 ? "#facc15" : "#22c55e";
-        return <CircleMarker key={point.street} center={[point.lat, point.lng]} radius={Math.max(9, point.risk / 5)} pathOptions={{ color, fillColor: color, fillOpacity: 0.42, opacity: 0.85, weight: 2 }}><Tooltip direction="top" offset={[0, -8]}>{point.street}: {point.risk}/100</Tooltip></CircleMarker>;
-      })}
       {userLocation ? (
         <Marker position={[userLocation.lat, userLocation.lng]} icon={userLocationIcon}>
           <Tooltip permanent direction="top" offset={[0, -12]} className="you-label">
