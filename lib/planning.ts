@@ -73,6 +73,9 @@ export function getParkingOptions(
 ) {
   const toleranceMultiplier = preferences.riskTolerance === "low" ? 1.22 : preferences.riskTolerance === "high" ? 0.82 : 1;
   const hourlyMeterRate = 4.5;
+  // Overnight meters are typically free overnight; bill a daytime window only.
+  const billedMeterHours =
+    durationMinutes >= 12 * 60 ? 8 : durationMinutes / 60;
 
   return violations
     .map((entry) => {
@@ -83,9 +86,8 @@ export function getParkingOptions(
         Math.round(getRisk(entry.lat, entry.lng, day, hour, durationMinutes) * restrictionMultiplier(restriction)),
       );
       const availability = getAvailabilityEstimate(entry, day, hour, context);
-      const meterCost = (durationMinutes / 60) * hourlyMeterRate;
-      const expectedTicketCost = (ticketRisk / 100) * entry.avgFine * toleranceMultiplier;
-      const expectedTowCost = (ticketRisk / 100) * (restriction.toLowerCase().includes("no standing") ? 22 : 5);
+      const meterCost = billedMeterHours * hourlyMeterRate;
+      const expectedTicketCost = (ticketRisk / 100) * entry.avgFine * toleranceMultiplier;      const expectedTowCost = (ticketRisk / 100) * (restriction.toLowerCase().includes("no standing") ? 22 : 5);
       const walkingCost = blocksAway * (preferences.isInAHurry ? 2 : 0.75);
       const searchMinutes = Math.max(1, Math.round((100 - availability) / 12));
       const searchCost = searchMinutes * (preferences.isInAHurry ? 2.5 : 0.7);

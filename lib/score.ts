@@ -73,7 +73,8 @@ export function getRiskBreakdown(
     {
       label: "Parking exposure",
       detail: formatDuration(durationMinutes),
-      strength: Math.min(100, Math.round((durationMinutes / 120) * 100)),
+      // Scale to overnight (12 hr) so 5 hr / overnight stays are distinguishable.
+      strength: Math.min(100, Math.round((durationMinutes / (12 * 60)) * 100)),
     },
   ];
 }
@@ -140,6 +141,8 @@ function formatHour(hour: number) {
 }
 
 function formatDuration(durationMinutes: number) {
+  if (durationMinutes >= 12 * 60) return "overnight";
   if (durationMinutes < 60) return `${durationMinutes} minutes`;
-  return `${durationMinutes / 60} ${durationMinutes === 60 ? "hour" : "hours"}`;
+  if (durationMinutes === 60) return "1 hour";
+  return `${durationMinutes / 60} hours`;
 }
