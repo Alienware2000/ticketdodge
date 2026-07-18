@@ -7,9 +7,12 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET() {
-  return NextResponse.json(await getParkingContext(), {
+  const context = await getParkingContext();
+  return NextResponse.json(context, {
     headers: {
       "Cache-Control": "public, s-maxage=120, stale-while-revalidate=300",
+      "X-Parking-Context-Schema": context.schemaVersion,
+      "X-Parking-Context-Quality": context.quality.status,
     },
   });
 }
