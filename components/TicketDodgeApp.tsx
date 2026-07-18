@@ -19,6 +19,7 @@ import {
   getStopRecommendation,
   type ParkingPreferences,
 } from "@/lib/planning";
+import type { ParkingContext } from "@/lib/parking-context";
 
 const FLATIRON = { lat: 40.7411, lng: -73.9897 };
 const durationOptions = [30, 60, 120];
@@ -64,12 +65,14 @@ export default function TicketDodgeApp() {
   const [query, setQuery] = useState("");
   const [searchMessage, setSearchMessage] = useState("");
   const [durationMinutes, setDurationMinutes] = useState(60);
+  const [arrivalHour, setArrivalHour] = useState(currentHour);
   const [preferences, setPreferences] = useState<ParkingPreferences>({
     maxWalkBlocks: 4,
     maxSearchMinutes: 8,
     riskTolerance: "medium",
     isInAHurry: false,
   });
+  const [parkingContext, setParkingContext] = useState<ParkingContext | null>(null);
   const userInteracted = useRef(false);
 
   useEffect(() => {
@@ -116,13 +119,24 @@ export default function TicketDodgeApp() {
     };
   }, []);
 
+  useEffect(() => {
+    let isActive = true;
+    fetch("/api/parking-context")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((context: ParkingContext | null) => {
+        if (isActive) setParkingContext(context);
+      })
+      .catch(() => undefined);
+    return () => { isActive = false; };
+  }, []);
+
   const selected = useMemo(
-    () => getNearestViolation(location.lat, location.lng, currentDay, currentHour),
-    [location, currentDay, currentHour],
+    () => getNearestViolation(location.lat, location.lng, currentDay, arrivalHour),
+    [location, currentDay, arrivalHour],
   );
   const score = useMemo(
-    () => getRisk(location.lat, location.lng, currentDay, currentHour, durationMinutes),
-    [location, currentDay, currentHour, durationMinutes],
+    () => getRisk(location.lat, location.lng, currentDay, arrivalHour, durationMinutes),
+    [location, currentDay, arrivalHour, durationMinutes],
   );
   const breakdown = useMemo(
     () =>
@@ -130,18 +144,18 @@ export default function TicketDodgeApp() {
         location.lat,
         location.lng,
         currentDay,
-        currentHour,
+        arrivalHour,
         durationMinutes,
       ),
-    [location, currentDay, currentHour, durationMinutes],
+    [location, currentDay, arrivalHour, durationMinutes],
   );
   const parkingOptions = useMemo(
-    () => getParkingOptions(location.lat, location.lng, currentDay, currentHour, durationMinutes, preferences),
-    [location, currentDay, currentHour, durationMinutes, preferences],
+    () => getParkingOptions(location.lat, location.lng, currentDay, arrivalHour, durationMinutes, preferences, parkingContext),
+    [location, currentDay, arrivalHour, durationMinutes, preferences, parkingContext],
   );
   const currentOption = useMemo(
-    () => getCurrentParkingOption(location.lat, location.lng, currentDay, currentHour, durationMinutes, preferences),
-    [location, currentDay, currentHour, durationMinutes, preferences],
+    () => getCurrentParkingOption(location.lat, location.lng, currentDay, arrivalHour, durationMinutes, preferences, parkingContext),
+    [location, currentDay, arrivalHour, durationMinutes, preferences, parkingContext],
   );
   const stopRecommendation = useMemo(
     () => getStopRecommendation(currentOption, parkingOptions, preferences),
@@ -154,7 +168,9 @@ export default function TicketDodgeApp() {
       : score >= 34
         ? Math.min(durationMinutes, 60)
         : durationMinutes;
-  const safeUntil = new Date(now.getTime() + safeMinutes * 60_000).toLocaleTimeString(
+  const arrivalTime = new Date(now);
+  arrivalTime.setHours(arrivalHour, 0, 0, 0);
+  const safeUntil = new Date(arrivalTime.getTime() + safeMinutes * 60_000).toLocaleTimeString(
     "en-US",
     { hour: "numeric", minute: "2-digit" },
   );
@@ -302,7 +318,7 @@ export default function TicketDodgeApp() {
             <p className="mt-1 text-xs text-slate-500">Selected curb near Flatiron</p>
           </div>
           <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-            {currentDay.slice(0, 3)} · {formatHour(currentHour)}
+            {currentDay.slice(0, 3)} · {formatHour(arrivalHour)}
           </span>
         </header>
 
@@ -332,6 +348,20 @@ export default function TicketDodgeApp() {
             })}
           </div>
         </fieldset>
+
+        <label className="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
+          When do you arrive?
+          <select
+            aria-label="Arrival time"
+            value={arrivalHour}
+            onChange={(event) => setArrivalHour(Number(event.target.value))}
+            className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5 text-sm font-bold normal-case tracking-normal text-white outline-none focus:ring-2 focus:ring-[#ff5a3c]"
+          >
+            {Array.from({ length: 24 }, (_, hour) => (
+              <option key={hour} value={hour} className="bg-[#101828]">{formatHour(hour)}</option>
+            ))}
+          </select>
+        </label>
 
         <section className="mt-4 rounded-[24px] border border-white/10 bg-white/[0.045] p-4 shadow-inner md:mt-5 md:p-5">
           <div className="flex items-center gap-5">
@@ -418,7 +448,7 @@ export default function TicketDodgeApp() {
             ))}
           </div>
           <p className="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-500">Current curb: {currentOption.availability}% estimated open · {currentOption.restriction}. ${currentOption.totalExpectedCost.toFixed(0)} = ${currentOption.meterCost.toFixed(0)} meter + ${currentOption.expectedTicketCost.toFixed(0)} ticket risk + ${currentOption.expectedTowCost.toFixed(0)} tow exposure + walking/search time.</p>
-          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability blends historical citation activity with meter-occupancy, traffic, event, and weather uncertainty proxies; live feeds can replace these signals.</p>
+          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability combines historical citation activity with a meter-occupancy proxy.{parkingContext ? ` Live inputs: ${parkingContext.weather.temperatureF ?? "—"}°F, ${parkingContext.traffic.medianMph ?? "—"} mph traffic, ${parkingContext.events.activeOrUpcoming} active Manhattan events.` : " Loading live weather, traffic, and event inputs…"}</p>
         </section>
 
         <details className="mt-3 rounded-2xl border border-white/10 bg-black/10 px-4 py-3">

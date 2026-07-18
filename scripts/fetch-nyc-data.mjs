@@ -98,6 +98,12 @@ const timeGroups = await query(
   null,
   " AND violation_time IS NOT NULL",
 );
+const profileGroups = await query(
+  "street_name, date_extract_dow(issue_date) as dow, violation_time, count(*) as ticket_count",
+  "street_name, dow, violation_time",
+  null,
+  " AND violation_time IS NOT NULL",
+);
 
 const totalByStreet = new Map(
   totals.map((row) => [row.street_name, Number(row.ticket_count)]),
@@ -137,6 +143,22 @@ for (const [key, count] of hourlyCounts) {
   keepLargest(peakHourByStreet, street, { hour: Number(hour) }, count);
 }
 
+const citationProfileCounts = new Map();
+for (const row of profileGroups) {
+  const hour = parseViolationHour(row.violation_time);
+  if (hour === null) continue;
+  const key = `${row.street_name}|${days[Number(row.dow)]}|${hour}`;
+  citationProfileCounts.set(key, (citationProfileCounts.get(key) ?? 0) + Number(row.ticket_count));
+}
+
+const citationProfileByStreet = new Map();
+for (const [key, count] of citationProfileCounts) {
+  const [street, day, hour] = key.split("|");
+  const profile = citationProfileByStreet.get(street) ?? [];
+  profile.push({ day, hour: Number(hour), count });
+  citationProfileByStreet.set(street, profile);
+}
+
 const violations = streetPoints.map((point) => {
   const topViolation = topViolationByStreet.get(point.street);
   const peakDay = peakDayByStreet.get(point.street);
@@ -156,6 +178,7 @@ const violations = streetPoints.map((point) => {
     topViolation:
       readableViolation[topViolation.code] ?? topViolation.description,
     avgFine: fineByCode[topViolation.code] ?? 65,
+    citationProfile: citationProfileByStreet.get(point.street) ?? [],
   };
 });
 
@@ -177,7 +200,7 @@ await writeFile(
       precinct: PRECINCT,
       pulledAt: new Date().toISOString(),
       methodology:
-        "Street-level FY2026 ticket totals, peak weekday/hour, and most common violation for eight Flatiron-area streets in Precinct 13. Coordinates are representative map points. Risk scoring remains a heuristic.",
+        "Street-level FY2026 ticket totals, weekday/hour citation profiles, and most common violation for eight Flatiron-area streets in Precinct 13. Coordinates are representative map points. Profiles support time-aware citation-risk estimates; they are not individual ticket probabilities.",
     },
     null,
     2,

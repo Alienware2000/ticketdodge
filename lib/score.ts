@@ -9,6 +9,16 @@ const getNormalizedCount = (count: number) => {
   return Math.round(((count - minimum) / (maximum - minimum)) * 100);
 };
 
+const getProfileCount = (lat: number, lng: number, day: string, hour: number) => {
+  const match = getNearestViolation(lat, lng, day, hour);
+  const profileCount = match.citationProfile?.find(
+    (entry) => entry.day === day && entry.hour === hour,
+  )?.count;
+  // Older checked-in snapshots may not yet contain the profile. Retain a
+  // deterministic fallback until `npm run data:refresh` is run.
+  return { match, count: profileCount ?? match.count / (7 * 24) };
+};
+
 const getHourDifference = (a: number, b: number) => {
   const difference = Math.abs(a - b);
   return Math.min(difference, 24 - difference);
@@ -25,8 +35,9 @@ export function getRisk(
   hour: number,
   durationMinutes = 60,
 ) {
-  const match = getNearestViolation(lat, lng, day, hour);
-  const hourlyRisk = getNormalizedCount(match.count) / 100;
+  const { count } = getProfileCount(lat, lng, day, hour);
+  const profileCounts = violations.flatMap((entry) => entry.citationProfile?.map((profile) => profile.count) ?? []);
+  const hourlyRisk = (profileCounts.length ? normalize(count, profileCounts) : getNormalizedCount(count)) / 100;
   const exposureHours = durationMinutes / 60;
   const adjustedRisk = 1 - (1 - hourlyRisk) ** exposureHours;
 
@@ -40,7 +51,7 @@ export function getRiskBreakdown(
   hour: number,
   durationMinutes: number,
 ) {
-  const match = getNearestViolation(lat, lng, day, hour);
+  const { match, count } = getProfileCount(lat, lng, day, hour);
   const hourDifference = getHourDifference(match.hour, hour);
   const sameDay = match.day === day;
   const timeStrength = Math.max(
@@ -51,8 +62,8 @@ export function getRiskBreakdown(
   return [
     {
       label: "Enforcement history",
-      detail: `${match.count.toLocaleString()} nearby tickets`,
-      strength: getNormalizedCount(match.count),
+      detail: `${Math.round(count).toLocaleString()} citations in this window`,
+      strength: profileCountsForRisk(count),
     },
     {
       label: "Time overlap",
@@ -65,6 +76,17 @@ export function getRiskBreakdown(
       strength: Math.min(100, Math.round((durationMinutes / 120) * 100)),
     },
   ];
+}
+
+function normalize(count: number, values: number[]) {
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  return maximum === minimum ? (count > 0 ? 100 : 0) : Math.round(((count - minimum) / (maximum - minimum)) * 100);
+}
+
+function profileCountsForRisk(count: number) {
+  const values = violations.flatMap((entry) => entry.citationProfile?.map((profile) => profile.count) ?? []);
+  return values.length ? normalize(count, values) : getNormalizedCount(count);
 }
 
 export function getConfidence(count: number) {

@@ -10,6 +10,11 @@ export type ViolationEntry = {
   count: number;
   topViolation: string;
   avgFine: number;
+  citationProfile?: {
+    day: string;
+    hour: number;
+    count: number;
+  }[];
 };
 
 export const violations: ViolationEntry[] = rawViolations;
