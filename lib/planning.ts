@@ -8,6 +8,10 @@ export type ParkingPreferences = {
   isInAHurry: boolean;
 };
 
+export type TrafficContext = {
+  searchMultiplier: number;
+};
+
 export type ParkingOption = {
   entry: ViolationEntry;
   blocksAway: number;
@@ -18,6 +22,8 @@ export type ParkingOption = {
   expectedTowCost: number;
   walkingCost: number;
   searchCost: number;
+  walkMinutes: number;
+  searchMinutes: number;
   totalExpectedCost: number;
   restriction: string;
 };
@@ -60,6 +66,7 @@ export function getParkingOptions(
   hour: number,
   durationMinutes: number,
   preferences: ParkingPreferences,
+  traffic: TrafficContext = { searchMultiplier: 1 },
 ) {
   const toleranceMultiplier = preferences.riskTolerance === "low" ? 1.22 : preferences.riskTolerance === "high" ? 0.82 : 1;
   const hourlyMeterRate = 4.5;
@@ -68,16 +75,27 @@ export function getParkingOptions(
     .map((entry) => {
       const blocksAway = Math.max(0, Math.round(distanceInMeters(lat, lng, entry) / METERS_PER_BLOCK));
       const restriction = entry.topViolation;
-      const ticketRisk = Math.min(
-        99,
-        Math.round(getRisk(entry.lat, entry.lng, day, hour, durationMinutes) * restrictionMultiplier(restriction)),
+      const ticketRisk = getRisk(
+        entry.lat,
+        entry.lng,
+        day,
+        hour,
+        durationMinutes,
       );
       const availability = getAvailabilityEstimate(entry, day, hour);
       const meterCost = (durationMinutes / 60) * hourlyMeterRate;
-      const expectedTicketCost = (ticketRisk / 100) * entry.avgFine * toleranceMultiplier;
+      const expectedTicketCost =
+        (ticketRisk / 100) *
+        entry.avgFine *
+        toleranceMultiplier *
+        restrictionMultiplier(restriction);
       const expectedTowCost = (ticketRisk / 100) * (restriction.toLowerCase().includes("no standing") ? 22 : 5);
-      const walkingCost = blocksAway * (preferences.isInAHurry ? 2 : 0.75);
-      const searchMinutes = Math.max(1, Math.round((100 - availability) / 12));
+      const walkMinutes = blocksAway * 2;
+      const walkingCost = walkMinutes * (preferences.isInAHurry ? 1.25 : 0.38);
+      const searchMinutes = Math.max(
+        1,
+        Math.round(((100 - availability) / 12) * traffic.searchMultiplier),
+      );
       const searchCost = searchMinutes * (preferences.isInAHurry ? 2.5 : 0.7);
       return {
         entry,
@@ -89,6 +107,8 @@ export function getParkingOptions(
         expectedTowCost,
         walkingCost,
         searchCost,
+        walkMinutes,
+        searchMinutes,
         totalExpectedCost: meterCost + expectedTicketCost + expectedTowCost + walkingCost + searchCost,
         restriction,
       } satisfies ParkingOption;
@@ -102,20 +122,45 @@ export function getStopRecommendation(
   options: ParkingOption[],
   preferences: ParkingPreferences,
 ) {
-  const betterOption = options.find((option) => option.entry.street !== current.entry.street);
+  const betterOption =
+    options.find(
+      (option) =>
+        option.entry.street !== current.entry.street &&
+        option.totalExpectedCost < current.totalExpectedCost,
+    ) ?? options.find((option) => option.entry.street !== current.entry.street);
   const expectedSavings = betterOption ? Math.max(0, current.totalExpectedCost - betterOption.totalExpectedCost) : 0;
   const chanceOfImprovement = betterOption ? betterOption.availability / 100 : 0;
-  const searchPenalty = Math.max(1.5, (preferences.isInAHurry ? 3 : 1) * Math.min(preferences.maxSearchMinutes, 10) / 3);
-  const shouldKeepSearching = chanceOfImprovement * expectedSavings > searchPenalty && !preferences.isInAHurry;
+  const additionalSearchMinutes = betterOption
+    ? Math.min(
+        preferences.maxSearchMinutes,
+        betterOption.searchMinutes + Math.ceil(betterOption.blocksAway * 0.75),
+      )
+    : 0;
+  const searchPenalty = Math.max(
+    1.5,
+    additionalSearchMinutes * (preferences.isInAHurry ? 2.5 : 0.7),
+  );
+  const shouldKeepSearching =
+    expectedSavings >= 15 &&
+    chanceOfImprovement * expectedSavings > searchPenalty &&
+    additionalSearchMinutes <= preferences.maxSearchMinutes &&
+    !preferences.isInAHurry;
+  const currentExposure = current.expectedTicketCost + current.expectedTowCost;
+  const betterExposure = betterOption
+    ? betterOption.expectedTicketCost + betterOption.expectedTowCost
+    : currentExposure;
+  const modeledExposureReduction = Math.max(0, currentExposure - betterExposure);
 
   return {
     shouldKeepSearching,
     betterOption,
     expectedSavings,
     chanceOfImprovement,
+    additionalSearchMinutes,
+    modeledExposureReduction,
     message: shouldKeepSearching
-      ? `Keep searching for up to ${preferences.maxSearchMinutes} min — a better nearby curb is likely worth about $${expectedSavings.toFixed(0)} in expected cost.`
-      : `Park here — the likely savings from continuing do not beat the time and uncertainty of searching.`,
+      ? `Try ${betterOption?.entry.street} — the modeled advantage is worth one short search loop.`
+      : `Park here — another loop is unlikely to repay the extra time.`,
   };
 }
 
@@ -126,10 +171,11 @@ export function getCurrentParkingOption(
   hour: number,
   durationMinutes: number,
   preferences: ParkingPreferences,
+  traffic: TrafficContext = { searchMultiplier: 1 },
 ) {
   const currentEntry = getNearestViolation(lat, lng, day, hour);
   return getParkingOptions(lat, lng, day, hour, durationMinutes, {
     ...preferences,
-    maxWalkBlocks: Math.max(preferences.maxWalkBlocks, 99),
-  }).find((option) => option.entry.street === currentEntry.street)!;
+    maxWalkBlocks: Number.MAX_SAFE_INTEGER,
+  }, traffic).find((option) => option.entry.street === currentEntry.street)!;
 }

@@ -14,6 +14,10 @@ export type ViolationEntry = {
 
 export const violations: ViolationEntry[] = rawViolations;
 export const dataSource = rawDataSource;
+export const totalTickets = violations.reduce(
+  (total, entry) => total + entry.count,
+  0,
+);
 
 const days = [
   "Sunday",

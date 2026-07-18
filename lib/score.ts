@@ -2,21 +2,50 @@ import { getNearestViolation, violations } from "@/lib/data";
 
 const getNormalizedCount = (count: number) => {
   const counts = violations.map((entry) => entry.count);
-  const minimum = Math.min(...counts);
   const maximum = Math.max(...counts);
 
-  if (maximum === minimum) return count > 0 ? 100 : 0;
-  return Math.round(((count - minimum) / (maximum - minimum)) * 100);
+  if (maximum === 0) return 0;
+  return Math.round((count / maximum) * 100);
 };
+
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const getHourDifference = (a: number, b: number) => {
   const difference = Math.abs(a - b);
   return Math.min(difference, 24 - difference);
 };
 
+const getDayDifference = (a: string, b: string) => {
+  const aIndex = Math.max(0, days.indexOf(a));
+  const bIndex = Math.max(0, days.indexOf(b));
+  const difference = Math.abs(aIndex - bIndex);
+  return Math.min(difference, 7 - difference);
+};
+
+const getTemporalStrength = (
+  peakDay: string,
+  peakHour: number,
+  day: string,
+  hour: number,
+) => {
+  const dayProximity = 1 - getDayDifference(peakDay, day) / 6;
+  const hourProximity = 1 - getHourDifference(peakHour, hour) / 18;
+  return 0.72 + dayProximity * 0.12 + hourProximity * 0.16;
+};
+
 /**
  * Returns a 0–100 risk score for the closest matching street and time window.
- * Counts are min/max normalized across the current violations dataset.
+ * Ticket volume is normalized against the busiest street, then adjusted by
+ * how closely the requested day/hour overlaps that street's real peak window.
+ * This is an enforcement index, not an individual ticket probability.
  */
 export function getRisk(
   lat: number,
@@ -26,7 +55,9 @@ export function getRisk(
   durationMinutes = 60,
 ) {
   const match = getNearestViolation(lat, lng, day, hour);
-  const hourlyRisk = getNormalizedCount(match.count) / 100;
+  const hourlyRisk =
+    (getNormalizedCount(match.count) / 100) *
+    getTemporalStrength(match.day, match.hour, day, hour);
   const exposureHours = durationMinutes / 60;
   const adjustedRisk = 1 - (1 - hourlyRisk) ** exposureHours;
 
@@ -41,11 +72,8 @@ export function getRiskBreakdown(
   durationMinutes: number,
 ) {
   const match = getNearestViolation(lat, lng, day, hour);
-  const hourDifference = getHourDifference(match.hour, hour);
-  const sameDay = match.day === day;
-  const timeStrength = Math.max(
-    10,
-    Math.round((sameDay ? 100 : 58) - hourDifference * (sameDay ? 7 : 3)),
+  const timeStrength = Math.round(
+    getTemporalStrength(match.day, match.hour, day, hour) * 100,
   );
 
   return [
