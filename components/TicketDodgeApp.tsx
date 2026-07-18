@@ -73,6 +73,7 @@ export default function TicketDodgeApp() {
     isInAHurry: false,
   });
   const [parkingContext, setParkingContext] = useState<ParkingContext | null>(null);
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "unavailable">("idle");
   const userInteracted = useRef(false);
 
   useEffect(() => {
@@ -176,6 +177,23 @@ export default function TicketDodgeApp() {
   );
   const confidence = getConfidence(selected.count);
   const recommendation = getRecommendation(score, safeUntil);
+  const decisionSignals = [
+    {
+      label: "Citation pattern",
+      value: `${Math.round(selected.count).toLocaleString()} records`,
+      note: "Historical enforcement at this curb",
+    },
+    {
+      label: "Stay length",
+      value: formatDuration(durationMinutes),
+      note: "Longer stays compound exposure",
+    },
+    {
+      label: "Curb availability",
+      value: `${currentOption.availability}% open`,
+      note: "Estimated from local activity patterns",
+    },
+  ];
 
   function selectStreet(value: string, announce = true) {
     const match = findStreet(value);
@@ -227,6 +245,22 @@ export default function TicketDodgeApp() {
     setLocation(userLocation);
     setQuery("");
     setSearchMessage("Centered on your location.");
+  }
+
+  async function handleShareDecision() {
+    const decision = `TicketDodge parking plan: ${selected.street} has a ${score}/100 ticket risk for a ${formatDuration(durationMinutes).toLowerCase()} stay at ${formatHour(arrivalHour)}. ${recommendation}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "TicketDodge parking plan", text: decision });
+        return;
+      }
+      await navigator.clipboard.writeText(decision);
+      setShareStatus("copied");
+      window.setTimeout(() => setShareStatus("idle"), 2200);
+    } catch {
+      setShareStatus("unavailable");
+      window.setTimeout(() => setShareStatus("idle"), 2200);
+    }
   }
 
   return (
@@ -410,6 +444,34 @@ export default function TicketDodgeApp() {
           <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#ff9d8b]">Recommended next step</p>
           <p className="mt-1 text-sm font-bold leading-snug text-white md:text-base">{recommendation}</p>
         </div>
+
+        <section className="mt-3 overflow-hidden rounded-2xl border border-sky-300/20 bg-gradient-to-br from-sky-400/[0.12] to-indigo-400/[0.06]" aria-label="Explainable parking decision">
+          <div className="flex items-start justify-between gap-3 px-4 pb-3 pt-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-sky-200">Decision receipt</p>
+              <h2 className="mt-1 text-sm font-black text-white">See what shaped this call</h2>
+            </div>
+            <button
+              type="button"
+              onClick={handleShareDecision}
+              className="rounded-lg border border-white/15 bg-white/10 px-2.5 py-1.5 text-[10px] font-bold text-white transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            >
+              {shareStatus === "copied" ? "Copied" : shareStatus === "unavailable" ? "Try again" : "Share"}
+            </button>
+          </div>
+          <div className="grid divide-y divide-white/10 border-t border-white/10 bg-[#0b1220]/35">
+            {decisionSignals.map((signal) => (
+              <div key={signal.label} className="flex items-center justify-between gap-4 px-4 py-2.5">
+                <div>
+                  <p className="text-[11px] font-bold text-slate-200">{signal.label}</p>
+                  <p className="mt-0.5 text-[9px] text-slate-400">{signal.note}</p>
+                </div>
+                <span className="shrink-0 text-[11px] font-black text-sky-200">{signal.value}</span>
+              </div>
+            ))}
+          </div>
+          <p className="px-4 py-2.5 text-[9px] leading-relaxed text-slate-400">Transparent estimate, not a guarantee: TicketDodge weighs historical citations, your arrival window, and expected exposure. It never claims access to a live enforcement feed.</p>
+        </section>
 
         <section className="mt-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.07] p-4">
           <div className="flex items-start justify-between gap-3">
