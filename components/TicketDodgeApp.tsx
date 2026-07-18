@@ -7,7 +7,6 @@ import {
   findStreet,
   getNearestViolation,
   streetNames,
-  violations,
 } from "@/lib/data";
 import {
   getConfidence,
@@ -75,7 +74,6 @@ export default function TicketDodgeApp() {
   });
   const [parkingContext, setParkingContext] = useState<ParkingContext | null>(null);
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "unavailable">("idle");
-  const [plannerTab, setPlannerTab] = useState<"route" | "heatmap">("route");
   const userInteracted = useRef(false);
 
   useEffect(() => {
@@ -196,34 +194,18 @@ export default function TicketDodgeApp() {
       note: "Estimated from local activity patterns",
     },
   ];
-  const heatmapPoints = useMemo(
-    () => violations.map((entry) => ({
-      lat: entry.lat,
-      lng: entry.lng,
-      street: entry.street,
-      risk: getRisk(entry.lat, entry.lng, currentDay, arrivalHour, durationMinutes),
-    })),
-    [arrivalHour, currentDay, durationMinutes],
-  );
-  const hourlyRisk = useMemo(
-    () => Array.from({ length: 24 }, (_, hour) => ({
-      hour,
-      risk: getRisk(location.lat, location.lng, currentDay, hour, durationMinutes),
-    })),
-    [currentDay, durationMinutes, location],
-  );
 
   function selectStreet(value: string, announce = true) {
     const match = findStreet(value);
     if (!match) {
-      if (announce) setSearchMessage("Try Broadway, 5th Ave, E 18th St, or Park Ave S.");
+      if (announce) setSearchMessage("Try a Flatiron destination like Broadway, 5th Ave, E 18th St, or Park Ave S.");
       return false;
     }
 
     userInteracted.current = true;
     setLocation({ lat: match.lat, lng: match.lng });
     setQuery(match.street);
-    setSearchMessage(announce ? `Showing ${match.street}` : "");
+    setSearchMessage(announce ? `Destination set: ${match.street}` : "");
     return true;
   }
 
@@ -245,7 +227,7 @@ export default function TicketDodgeApp() {
     userInteracted.current = true;
     setLocation(nextLocation);
     setQuery("");
-    setSearchMessage("Map point selected");
+    setSearchMessage("Destination point selected");
   }
 
   function handleOptionSelect(street: string) {
@@ -254,7 +236,7 @@ export default function TicketDodgeApp() {
     userInteracted.current = true;
     setLocation({ lat: alternative.entry.lat, lng: alternative.entry.lng });
     setQuery(alternative.entry.street);
-    setSearchMessage(`Showing recommendation: ${alternative.entry.street}`);
+    setSearchMessage(`Recommended parking: ${alternative.entry.street} · ${alternative.blocksAway} block walk to your destination`);
   }
 
   function handleUseMyLocation() {
@@ -289,7 +271,6 @@ export default function TicketDodgeApp() {
           userLocation={userLocation}
           selectedStreet={selected.street}
           scoreColor={riskStyle.color}
-          heatmapPoints={plannerTab === "heatmap" ? heatmapPoints : []}
           onLocationSelect={handleMapClick}
         />
         <div className="map-vignette" />
@@ -317,14 +298,14 @@ export default function TicketDodgeApp() {
             <span className="absolute bottom-0 right-0 h-1.5 w-0.5 rotate-[-45deg] rounded-full bg-slate-400" />
           </span>
           <label htmlFor="street-search" className="sr-only">
-            Search a Flatiron street
+            Where are you going?
           </label>
           <input
             id="street-search"
             list="street-options"
             value={query}
             onChange={(event) => handleQueryChange(event.target.value)}
-            placeholder="Try Broadway or 5th Ave"
+            placeholder="Where are you going? Try Broadway"
             autoComplete="off"
             className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none placeholder:font-medium placeholder:text-slate-400"
           />
@@ -337,12 +318,12 @@ export default function TicketDodgeApp() {
             type="submit"
             className="rounded-xl bg-[#101828] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-[#ff5a3c] focus:ring-offset-2"
           >
-            Check curb
+            Plan parking
           </button>
         </div>
         <div className="mt-2 flex min-h-8 items-center justify-between gap-2 pl-2">
           <p className="rounded-full bg-white/85 px-3 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm backdrop-blur" aria-live="polite">
-            {searchMessage || "Search a street or tap a curb on the map."}
+            {searchMessage || "Enter your destination, then we’ll find the best place to park nearby."}
           </p>
           {userLocation ? (
             <button
@@ -365,50 +346,15 @@ export default function TicketDodgeApp() {
         <header className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#ff9d8b]">
-              Your parking plan
+              Your destination
             </p>
             <h1 className="mt-1 text-lg font-bold tracking-tight md:text-xl">{selected.street}</h1>
-            <p className="mt-1 text-xs text-slate-500">Selected curb near Flatiron</p>
+            <p className="mt-1 text-xs text-slate-500">We’ll rank parking spots within your walking limit.</p>
           </div>
           <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
             {currentDay.slice(0, 3)} · {formatHour(arrivalHour)}
           </span>
         </header>
-
-        <div className="mt-4 grid grid-cols-2 rounded-xl bg-white/[0.06] p-1" role="tablist" aria-label="Parking tools">
-          <button type="button" role="tab" aria-selected={plannerTab === "route"} onClick={() => setPlannerTab("route")} className={`rounded-lg px-3 py-2 text-[11px] font-black transition ${plannerTab === "route" ? "bg-white text-[#101828] shadow-sm" : "text-slate-400 hover:text-white"}`}>Route plan</button>
-          <button type="button" role="tab" aria-selected={plannerTab === "heatmap"} onClick={() => setPlannerTab("heatmap")} className={`rounded-lg px-3 py-2 text-[11px] font-black transition ${plannerTab === "heatmap" ? "bg-white text-[#101828] shadow-sm" : "text-slate-400 hover:text-white"}`}>Enforcement map</button>
-        </div>
-
-        {plannerTab === "heatmap" ? (
-          <section className="mt-3 rounded-2xl border border-violet-300/20 bg-violet-400/[0.08] p-4" aria-label="Hourly enforcement intensity">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-violet-200">Live exploration</p>
-                <h2 className="mt-1 text-sm font-black text-white">{selected.street} by arrival hour</h2>
-              </div>
-              <span className="rounded-full bg-violet-300/15 px-2.5 py-1 text-[10px] font-bold text-violet-100">{formatHour(arrivalHour)} selected</span>
-            </div>
-            <div className="mt-4 grid grid-cols-12 gap-1" aria-label="24 hour citation intensity chart">
-              {hourlyRisk.map(({ hour, risk }) => (
-                <button key={hour} type="button" onClick={() => setArrivalHour(hour)} aria-label={`${formatHour(hour)}: ${risk} risk`} className="group flex min-w-0 flex-col items-center gap-1">
-                  <span className="flex h-16 w-full items-end rounded-md bg-black/20 px-[2px]">
-                    <span className={`w-full rounded-sm transition-all ${hour === arrivalHour ? "bg-[#ff5a3c]" : risk > 66 ? "bg-rose-400" : risk >= 34 ? "bg-amber-300" : "bg-emerald-400"}`} style={{ height: `${Math.max(8, risk)}%` }} />
-                  </span>
-                  <span className={`text-[8px] font-bold ${hour === arrivalHour ? "text-white" : "text-slate-500"}`}>{hour % 2 === 0 ? formatHour(hour).replace("am", "").replace("pm", "") : ""}</span>
-                </button>
-              ))}
-            </div>
-            <p className="mt-3 text-[10px] leading-relaxed text-slate-400">Tap any hour to update the map. Each curb marker is colored by its citation-intensity estimate for that arrival window.</p>
-          </section>
-        ) : (
-          <section className="mt-3 rounded-2xl border border-blue-300/20 bg-blue-400/[0.08] p-3" aria-label="Route-aware parking summary">
-            <div className="flex items-center justify-between gap-3">
-              <div><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-blue-200">Destination-aware ranking</p><p className="mt-1 text-xs font-bold text-white">Walk, meter cost, ticket exposure, and availability in one plan.</p></div>
-              <span className="shrink-0 rounded-full bg-blue-300/15 px-2.5 py-1 text-[10px] font-black text-blue-100">{preferences.maxWalkBlocks} block max</span>
-            </div>
-          </section>
-        )}
 
         <fieldset className="mt-4 md:mt-5">
           <legend className="flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
@@ -542,7 +488,7 @@ export default function TicketDodgeApp() {
 
         <section className="mt-3 rounded-2xl border border-white/10 bg-black/10 p-4">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xs font-bold text-white">{plannerTab === "route" ? "Route-ranked curbs" : "Curbs at this hour"}</h2>
+            <h2 className="text-xs font-bold text-white">Best places to park nearby</h2>
             <span className="text-[10px] font-semibold text-slate-500">walk + meter + exposure</span>
           </div>
           <div className="mt-3 space-y-2">
@@ -554,17 +500,17 @@ export default function TicketDodgeApp() {
                 className={`w-full rounded-xl px-3 py-2.5 text-left transition focus:outline-none focus:ring-2 focus:ring-emerald-400 ${option.entry.street === selected.street ? "bg-white/10" : "bg-white/[0.04] hover:bg-white/[0.08]"}`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="min-w-0"><span className="mr-2 text-[10px] font-black text-emerald-300">#{index + 1}</span><span className="text-xs font-bold text-white">{option.entry.street}</span></span>
+                  <span className="min-w-0"><span className="mr-2 text-[10px] font-black text-emerald-300">{index === 0 ? "BEST" : `#${index + 1}`}</span><span className="text-xs font-bold text-white">{option.entry.street}</span></span>
                   <span className="text-sm font-black text-emerald-300">${option.totalExpectedCost.toFixed(0)}</span>
                 </div>
                 <div className="mt-1 flex flex-wrap gap-x-3 text-[10px] font-semibold text-slate-500">
-                  <span>{option.walkingMinutes} min walk</span><span>{option.availability}% open</span><span>{option.ticketRisk}% ticket risk</span>
+                  <span>{option.blocksAway} block walk</span><span>{option.availability}% open</span><span>{option.ticketRisk}% ticket risk</span>
                 </div>
               </button>
             ))}
           </div>
           <p className="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-500">Current curb: {currentOption.availability}% estimated open · {currentOption.restriction}. ${currentOption.totalExpectedCost.toFixed(0)} = ${currentOption.meterCost.toFixed(0)} meter + ${currentOption.expectedTicketCost.toFixed(0)} ticket risk + ${currentOption.expectedTowCost.toFixed(0)} tow exposure + walking/search time.</p>
-          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability combines historical citation activity with a meter-occupancy proxy.{parkingContext ? ` Live inputs: ${parkingContext.weather.temperatureF ?? "—"}°F, ${parkingContext.traffic.medianMph ?? "—"} mph traffic, ${parkingContext.events.activeOrUpcoming} active Manhattan events.` : " Loading live weather, traffic, and event inputs…"}</p>
+          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability combines historical citation activity with a meter-occupancy proxy.{parkingContext ? ` Live inputs: ${parkingContext.weather.temperatureF ?? "—"}°F, ${parkingContext.traffic.medianMph ?? "—"} mph traffic, ${parkingContext.events.activeOrUpcoming} active Manhattan events${parkingContext.sources.parking === "here" ? `, and ${parkingContext.parking.nearbyFacilities} HERE parking facilities nearby.` : "."}` : " Loading live weather, traffic, event, and parking inputs…"}</p>
         </section>
 
         <details className="mt-3 rounded-2xl border border-white/10 bg-black/10 px-4 py-3">

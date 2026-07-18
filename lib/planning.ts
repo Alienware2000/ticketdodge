@@ -12,7 +12,6 @@ export type ParkingPreferences = {
 export type ParkingOption = {
   entry: ViolationEntry;
   blocksAway: number;
-  walkingMinutes: number;
   availability: number;
   ticketRisk: number;
   meterCost: number;
@@ -88,13 +87,11 @@ export function getParkingOptions(
       const expectedTicketCost = (ticketRisk / 100) * entry.avgFine * toleranceMultiplier;
       const expectedTowCost = (ticketRisk / 100) * (restriction.toLowerCase().includes("no standing") ? 22 : 5);
       const walkingCost = blocksAway * (preferences.isInAHurry ? 2 : 0.75);
-      const walkingMinutes = Math.max(1, Math.round(blocksAway * 1.25));
       const searchMinutes = Math.max(1, Math.round((100 - availability) / 12));
       const searchCost = searchMinutes * (preferences.isInAHurry ? 2.5 : 0.7);
       return {
         entry,
         blocksAway,
-        walkingMinutes,
         availability,
         ticketRisk,
         meterCost,
