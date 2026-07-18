@@ -1,0 +1,82 @@
+[
+  {
+    "street": "Broadway & W 23rd St",
+    "lat": 40.7422,
+    "lng": -73.9893,
+    "day": "Monday",
+    "hour": 14,
+    "count": 1284,
+    "topViolation": "No Standing – Commercial Meter Zone",
+    "avgFine": 115
+  },
+  {
+    "street": "Broadway & E 21st St",
+    "lat": 40.7402,
+    "lng": -73.9897,
+    "day": "Friday",
+    "hour": 16,
+    "count": 1096,
+    "topViolation": "Expired Meter",
+    "avgFine": 65
+  },
+  {
+    "street": "5th Ave & W 23rd St",
+    "lat": 40.7427,
+    "lng": -73.9908,
+    "day": "Tuesday",
+    "hour": 11,
+    "count": 954,
+    "topViolation": "No Parking – Street Cleaning",
+    "avgFine": 65
+  },
+  {
+    "street": "5th Ave & W 20th St",
+    "lat": 40.7401,
+    "lng": -73.992,
+    "day": "Thursday",
+    "hour": 13,
+    "count": 1187,
+    "topViolation": "No Standing – Day/Time Limits",
+    "avgFine": 115
+  },
+  {
+    "street": "E 18th St & Broadway",
+    "lat": 40.7382,
+    "lng": -73.9893,
+    "day": "Wednesday",
+    "hour": 9,
+    "count": 642,
+    "topViolation": "Expired Meter",
+    "avgFine": 65
+  },
+  {
+    "street": "E 18th St & Park Ave S",
+    "lat": 40.7363,
+    "lng": -73.9871,
+    "day": "Saturday",
+    "hour": 18,
+    "count": 388,
+    "topViolation": "No Parking – Street Cleaning",
+    "avgFine": 65
+  },
+  {
+    "street": "Park Ave S & E 23rd St",
+    "lat": 40.7405,
+    "lng": -73.9867,
+    "day": "Monday",
+    "hour": 15,
+    "count": 1468,
+    "topViolation": "No Standing – Bus Stop",
+    "avgFine": 115
+  },
+  {
+    "street": "Park Ave S & E 20th St",
+    "lat": 40.7381,
+    "lng": -73.9878,
+    "day": "Sunday",
+    "hour": 20,
+    "count": 276,
+    "topViolation": "Fire Hydrant",
+    "avgFine": 115
+  }
+]
