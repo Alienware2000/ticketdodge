@@ -12,7 +12,7 @@ TicketDodge compares the curb in front of a driver with nearby alternatives and 
 
 - **Money:** avoid streets with heavier historical enforcement and common $65–$115 violations.
 - **Time:** stop circling when the modeled advantage of another block no longer repays the search time.
-- **Live context:** the server reads the latest public NYC DOT traffic-speed snapshot and uses it only to adjust search friction. Traffic never changes the ticket-risk index.
+- **Live context:** the server combines public NYC DOT traffic, current weather, and Manhattan event feeds to adjust parking-opportunity and search-friction estimates. Citation risk still comes from historical enforcement profiles.
 
 ## What is real vs. estimated
 
@@ -21,6 +21,7 @@ TicketDodge compares the curb in front of a driver with nearby alternatives and 
 | Street ticket totals, peak day/hour, top violation | NYC Open Data FY2026 |
 | Fine amount | NYC Department of Finance schedule |
 | Nearby approach speed | Latest NYC DOT Traffic Speeds snapshot |
+| Weather and active events | Open-Meteo and NYC Open Data snapshots |
 | Risk index, parking opportunity, search time, modeled cost | Clearly labeled heuristic outputs |
 | Map coordinates | Representative Flatiron points |
 
@@ -57,7 +58,8 @@ Adjust the street list, coordinates, or precinct in `/scripts/fetch-nyc-data.mjs
   count: number;
   topViolation: string;
   avgFine: number;
+  citationProfile?: Array<{ day: string; hour: number; count: number }>;
 }
 ```
 
-The app reads that file through `/lib/data.ts`; `/lib/score.ts` normalizes each count against the busiest included street, adjusts it by proximity to the street’s peak day/hour, and increases exposure for longer stays. `/app/api/conditions/route.ts` reads the no-key NYC DOT feed. No API key or environment configuration is required.
+The app reads that file through `/lib/data.ts`; `/lib/score.ts` compares the selected street’s real weekday/hour profile with the other included windows and increases exposure for longer stays. `/app/api/parking-context/route.ts` serves the no-key live-context providers. No API key or environment configuration is required.

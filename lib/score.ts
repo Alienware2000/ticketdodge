@@ -2,50 +2,31 @@ import { getNearestViolation, violations } from "@/lib/data";
 
 const getNormalizedCount = (count: number) => {
   const counts = violations.map((entry) => entry.count);
+  const minimum = Math.min(...counts);
   const maximum = Math.max(...counts);
 
-  if (maximum === 0) return 0;
-  return Math.round((count / maximum) * 100);
+  if (maximum === minimum) return count > 0 ? 100 : 0;
+  return Math.round(((count - minimum) / (maximum - minimum)) * 100);
 };
 
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+const getProfileCount = (lat: number, lng: number, day: string, hour: number) => {
+  const match = getNearestViolation(lat, lng, day, hour);
+  const profileCount = match.citationProfile?.find(
+    (entry) => entry.day === day && entry.hour === hour,
+  )?.count;
+  // Older checked-in snapshots may not yet contain the profile. Retain a
+  // deterministic fallback until `npm run data:refresh` is run.
+  return { match, count: profileCount ?? match.count / (7 * 24) };
+};
 
 const getHourDifference = (a: number, b: number) => {
   const difference = Math.abs(a - b);
   return Math.min(difference, 24 - difference);
 };
 
-const getDayDifference = (a: string, b: string) => {
-  const aIndex = Math.max(0, days.indexOf(a));
-  const bIndex = Math.max(0, days.indexOf(b));
-  const difference = Math.abs(aIndex - bIndex);
-  return Math.min(difference, 7 - difference);
-};
-
-const getTemporalStrength = (
-  peakDay: string,
-  peakHour: number,
-  day: string,
-  hour: number,
-) => {
-  const dayProximity = 1 - getDayDifference(peakDay, day) / 6;
-  const hourProximity = 1 - getHourDifference(peakHour, hour) / 18;
-  return 0.72 + dayProximity * 0.12 + hourProximity * 0.16;
-};
-
 /**
  * Returns a 0–100 risk score for the closest matching street and time window.
- * Ticket volume is normalized against the busiest street, then adjusted by
- * how closely the requested day/hour overlaps that street's real peak window.
- * This is an enforcement index, not an individual ticket probability.
+ * Counts are min/max normalized across the current violations dataset.
  */
 export function getRisk(
   lat: number,
@@ -54,10 +35,9 @@ export function getRisk(
   hour: number,
   durationMinutes = 60,
 ) {
-  const match = getNearestViolation(lat, lng, day, hour);
-  const hourlyRisk =
-    (getNormalizedCount(match.count) / 100) *
-    getTemporalStrength(match.day, match.hour, day, hour);
+  const { count } = getProfileCount(lat, lng, day, hour);
+  const profileCounts = violations.flatMap((entry) => entry.citationProfile?.map((profile) => profile.count) ?? []);
+  const hourlyRisk = (profileCounts.length ? normalize(count, profileCounts) : getNormalizedCount(count)) / 100;
   const exposureHours = durationMinutes / 60;
   const adjustedRisk = 1 - (1 - hourlyRisk) ** exposureHours;
 
@@ -71,16 +51,19 @@ export function getRiskBreakdown(
   hour: number,
   durationMinutes: number,
 ) {
-  const match = getNearestViolation(lat, lng, day, hour);
-  const timeStrength = Math.round(
-    getTemporalStrength(match.day, match.hour, day, hour) * 100,
+  const { match, count } = getProfileCount(lat, lng, day, hour);
+  const hourDifference = getHourDifference(match.hour, hour);
+  const sameDay = match.day === day;
+  const timeStrength = Math.max(
+    10,
+    Math.round((sameDay ? 100 : 58) - hourDifference * (sameDay ? 7 : 3)),
   );
 
   return [
     {
       label: "Enforcement history",
-      detail: `${match.count.toLocaleString()} nearby tickets`,
-      strength: getNormalizedCount(match.count),
+      detail: `${Math.round(count).toLocaleString()} citations in this window`,
+      strength: profileCountsForRisk(count),
     },
     {
       label: "Time overlap",
@@ -93,6 +76,17 @@ export function getRiskBreakdown(
       strength: Math.min(100, Math.round((durationMinutes / 120) * 100)),
     },
   ];
+}
+
+function normalize(count: number, values: number[]) {
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  return maximum === minimum ? (count > 0 ? 100 : 0) : Math.round(((count - minimum) / (maximum - minimum)) * 100);
+}
+
+function profileCountsForRisk(count: number) {
+  const values = violations.flatMap((entry) => entry.citationProfile?.map((profile) => profile.count) ?? []);
+  return values.length ? normalize(count, values) : getNormalizedCount(count);
 }
 
 export function getConfidence(count: number) {

@@ -4,6 +4,6 @@
   "datasetUrl": "https://data.cityofnewyork.us/d/pvqr-7yc4",
   "fineScheduleUrl": "https://www.nyc.gov/site/finance/vehicles/services-violation-codes.page",
   "precinct": 13,
-  "pulledAt": "2026-07-18T16:12:01.762Z",
-  "methodology": "Street-level FY2026 ticket totals, peak weekday/hour, and most common violation for eight Flatiron-area streets in Precinct 13. Coordinates are representative map points. Risk scoring remains a heuristic."
+  "pulledAt": "2026-07-18T17:00:37.604Z",
+  "methodology": "Street-level FY2026 ticket totals, weekday/hour citation profiles, and most common violation for eight Flatiron-area streets in Precinct 13. Coordinates are representative map points. Profiles support time-aware citation-risk estimates; they are not individual ticket probabilities."
 }

@@ -7,7 +7,7 @@ import {
   findStreet,
   getNearestViolation,
   streetNames,
-  totalTickets,
+  violations,
 } from "@/lib/data";
 import {
   getConfidence,
@@ -20,21 +20,10 @@ import {
   getStopRecommendation,
   type ParkingPreferences,
 } from "@/lib/planning";
+import type { ParkingContext } from "@/lib/parking-context";
 
 const FLATIRON = { lat: 40.7411, lng: -73.9897 };
 const durationOptions = [30, 60, 120];
-
-type TrafficCondition = {
-  available: boolean;
-  source: string;
-  sourceUrl: string;
-  speedMph?: number;
-  observedAt?: string;
-  linkName?: string;
-  distanceMiles?: number;
-  label: string;
-  searchMultiplier: number;
-};
 
 function formatHour(hour: number) {
   const normalized = hour % 24;
@@ -58,14 +47,14 @@ function formatDuration(durationMinutes: number) {
   return `${durationMinutes / 60} hr`;
 }
 
-function getRecommendation(score: number) {
+function getRecommendation(score: number, safeUntil: string) {
   if (score > 66) {
-    return "Heavy historical enforcement—keep this stop short.";
+    return `Move by ${safeUntil} — enforcement is heavy on this block.`;
   }
   if (score >= 34) {
-    return "Recheck the curb or compare the alternatives below.";
+    return `Recheck by ${safeUntil}, or choose the safer block below.`;
   }
-  return "Historical enforcement is relatively lower here.";
+  return `Risk stays relatively low through ${safeUntil}.`;
 }
 
 export default function TicketDodgeApp() {
@@ -77,13 +66,16 @@ export default function TicketDodgeApp() {
   const [query, setQuery] = useState("");
   const [searchMessage, setSearchMessage] = useState("");
   const [durationMinutes, setDurationMinutes] = useState(60);
-  const [traffic, setTraffic] = useState<TrafficCondition | null>(null);
+  const [arrivalHour, setArrivalHour] = useState(currentHour);
   const [preferences, setPreferences] = useState<ParkingPreferences>({
     maxWalkBlocks: 4,
     maxSearchMinutes: 8,
     riskTolerance: "medium",
     isInAHurry: false,
   });
+  const [parkingContext, setParkingContext] = useState<ParkingContext | null>(null);
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "unavailable">("idle");
+  const [plannerTab, setPlannerTab] = useState<"route" | "heatmap">("route");
   const userInteracted = useRef(false);
 
   useEffect(() => {
@@ -131,40 +123,23 @@ export default function TicketDodgeApp() {
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadTrafficCondition() {
-      try {
-        const response = await fetch(
-          `/api/conditions?lat=${location.lat}&lng=${location.lng}`,
-          { cache: "no-store", signal: controller.signal },
-        );
-        const condition = (await response.json()) as TrafficCondition;
-        setTraffic(condition);
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        setTraffic({
-          available: false,
-          source: "NYC DOT Traffic Speeds",
-          sourceUrl:
-            "https://data.cityofnewyork.us/Transportation/DOT-Traffic-Speeds/i4gi-tjb9",
-          label: "Feed unavailable",
-          searchMultiplier: 1,
-        });
-      }
-    }
-
-    loadTrafficCondition();
-    return () => controller.abort();
-  }, [location.lat, location.lng]);
+    let isActive = true;
+    fetch("/api/parking-context")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((context: ParkingContext | null) => {
+        if (isActive) setParkingContext(context);
+      })
+      .catch(() => undefined);
+    return () => { isActive = false; };
+  }, []);
 
   const selected = useMemo(
-    () => getNearestViolation(location.lat, location.lng, currentDay, currentHour),
-    [location, currentDay, currentHour],
+    () => getNearestViolation(location.lat, location.lng, currentDay, arrivalHour),
+    [location, currentDay, arrivalHour],
   );
   const score = useMemo(
-    () => getRisk(location.lat, location.lng, currentDay, currentHour, durationMinutes),
-    [location, currentDay, currentHour, durationMinutes],
+    () => getRisk(location.lat, location.lng, currentDay, arrivalHour, durationMinutes),
+    [location, currentDay, arrivalHour, durationMinutes],
   );
   const breakdown = useMemo(
     () =>
@@ -172,36 +147,18 @@ export default function TicketDodgeApp() {
         location.lat,
         location.lng,
         currentDay,
-        currentHour,
+        arrivalHour,
         durationMinutes,
       ),
-    [location, currentDay, currentHour, durationMinutes],
+    [location, currentDay, arrivalHour, durationMinutes],
   );
   const parkingOptions = useMemo(
-    () =>
-      getParkingOptions(
-        location.lat,
-        location.lng,
-        currentDay,
-        currentHour,
-        durationMinutes,
-        preferences,
-        { searchMultiplier: traffic?.searchMultiplier ?? 1 },
-      ),
-    [location, currentDay, currentHour, durationMinutes, preferences, traffic?.searchMultiplier],
+    () => getParkingOptions(location.lat, location.lng, currentDay, arrivalHour, durationMinutes, preferences, parkingContext),
+    [location, currentDay, arrivalHour, durationMinutes, preferences, parkingContext],
   );
   const currentOption = useMemo(
-    () =>
-      getCurrentParkingOption(
-        location.lat,
-        location.lng,
-        currentDay,
-        currentHour,
-        durationMinutes,
-        preferences,
-        { searchMultiplier: traffic?.searchMultiplier ?? 1 },
-      ),
-    [location, currentDay, currentHour, durationMinutes, preferences, traffic?.searchMultiplier],
+    () => getCurrentParkingOption(location.lat, location.lng, currentDay, arrivalHour, durationMinutes, preferences, parkingContext),
+    [location, currentDay, arrivalHour, durationMinutes, preferences, parkingContext],
   );
   const stopRecommendation = useMemo(
     () => getStopRecommendation(currentOption, parkingOptions, preferences),
@@ -214,19 +171,47 @@ export default function TicketDodgeApp() {
       : score >= 34
         ? Math.min(durationMinutes, 60)
         : durationMinutes;
-  const safeUntil = new Date(now.getTime() + safeMinutes * 60_000).toLocaleTimeString(
+  const arrivalTime = new Date(now);
+  arrivalTime.setHours(arrivalHour, 0, 0, 0);
+  const safeUntil = new Date(arrivalTime.getTime() + safeMinutes * 60_000).toLocaleTimeString(
     "en-US",
     { hour: "numeric", minute: "2-digit" },
   );
   const confidence = getConfidence(selected.count);
-  const recommendation = getRecommendation(score);
-  const decisionIsSearch = stopRecommendation.shouldKeepSearching;
-  const decisionMoney = decisionIsSearch
-    ? Math.max(1, Math.round(stopRecommendation.modeledExposureReduction))
-    : selected.avgFine;
-  const decisionMinutes = decisionIsSearch
-    ? Math.max(1, stopRecommendation.additionalSearchMinutes)
-    : preferences.maxSearchMinutes;
+  const recommendation = getRecommendation(score, safeUntil);
+  const decisionSignals = [
+    {
+      label: "Citation pattern",
+      value: `${Math.round(selected.count).toLocaleString()} records`,
+      note: "Historical enforcement at this curb",
+    },
+    {
+      label: "Stay length",
+      value: formatDuration(durationMinutes),
+      note: "Longer stays compound exposure",
+    },
+    {
+      label: "Curb availability",
+      value: `${currentOption.availability}% open`,
+      note: "Estimated from local activity patterns",
+    },
+  ];
+  const heatmapPoints = useMemo(
+    () => violations.map((entry) => ({
+      lat: entry.lat,
+      lng: entry.lng,
+      street: entry.street,
+      risk: getRisk(entry.lat, entry.lng, currentDay, arrivalHour, durationMinutes),
+    })),
+    [arrivalHour, currentDay, durationMinutes],
+  );
+  const hourlyRisk = useMemo(
+    () => Array.from({ length: 24 }, (_, hour) => ({
+      hour,
+      risk: getRisk(location.lat, location.lng, currentDay, hour, durationMinutes),
+    })),
+    [currentDay, durationMinutes, location],
+  );
 
   function selectStreet(value: string, announce = true) {
     const match = findStreet(value);
@@ -280,6 +265,22 @@ export default function TicketDodgeApp() {
     setSearchMessage("Centered on your location.");
   }
 
+  async function handleShareDecision() {
+    const decision = `TicketDodge parking plan: ${selected.street} has a ${score}/100 ticket risk for a ${formatDuration(durationMinutes).toLowerCase()} stay at ${formatHour(arrivalHour)}. ${recommendation}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "TicketDodge parking plan", text: decision });
+        return;
+      }
+      await navigator.clipboard.writeText(decision);
+      setShareStatus("copied");
+      window.setTimeout(() => setShareStatus("idle"), 2200);
+    } catch {
+      setShareStatus("unavailable");
+      window.setTimeout(() => setShareStatus("idle"), 2200);
+    }
+  }
+
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-[#ebe8df]">
       <section className="absolute inset-0 md:right-[420px]" aria-label="Parking ticket risk map">
@@ -288,6 +289,7 @@ export default function TicketDodgeApp() {
           userLocation={userLocation}
           selectedStreet={selected.street}
           scoreColor={riskStyle.color}
+          heatmapPoints={plannerTab === "heatmap" ? heatmapPoints : []}
           onLocationSelect={handleMapClick}
         />
         <div className="map-vignette" />
@@ -355,7 +357,7 @@ export default function TicketDodgeApp() {
       </form>
 
       <aside
-        className="risk-panel absolute bottom-0 right-0 z-[1200] h-[64vh] w-full overscroll-contain overflow-y-auto rounded-t-[28px] border-t border-white/10 bg-[#101828] px-5 pb-6 pt-4 text-white shadow-[0_-15px_50px_rgba(16,24,40,0.3)] md:top-0 md:h-full md:w-[420px] md:rounded-none md:border-l md:border-t-0 md:px-8 md:pb-8 md:pt-7 md:shadow-[-18px_0_50px_rgba(16,24,40,0.16)]"
+        className="risk-panel absolute bottom-0 right-0 z-[1200] h-[54vh] w-full overscroll-contain overflow-y-auto rounded-t-[28px] border-t border-white/10 bg-[#101828] px-5 pb-6 pt-4 text-white shadow-[0_-15px_50px_rgba(16,24,40,0.3)] md:top-0 md:h-full md:w-[420px] md:rounded-none md:border-l md:border-t-0 md:px-8 md:pb-8 md:pt-7 md:shadow-[-18px_0_50px_rgba(16,24,40,0.16)]"
         aria-live="polite"
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20 md:hidden" />
@@ -369,43 +371,44 @@ export default function TicketDodgeApp() {
             <p className="mt-1 text-xs text-slate-500">Selected curb near Flatiron</p>
           </div>
           <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-            {currentDay.slice(0, 3)} · {formatHour(currentHour)}
+            {currentDay.slice(0, 3)} · {formatHour(arrivalHour)}
           </span>
         </header>
 
-        <section
-          className="mt-3 grid grid-cols-3 overflow-hidden rounded-xl border border-white/10 bg-black/10"
-          aria-label="Data sources"
-        >
-          <div className="border-r border-white/10 px-2.5 py-2">
-            <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-emerald-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> NYC data
-            </p>
-            <p className="mt-0.5 truncate text-[10px] font-semibold text-slate-400">
-              {totalTickets.toLocaleString()} tickets
-            </p>
-          </div>
-          <a
-            href={traffic?.sourceUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="border-r border-white/10 px-2.5 py-2 transition hover:bg-white/5"
-            title={traffic?.linkName}
-          >
-            <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-sky-300">
-              <span className={`h-1.5 w-1.5 rounded-full ${traffic?.available ? "animate-pulse bg-sky-400" : "bg-slate-600"}`} /> DOT feed
-            </p>
-            <p className="mt-0.5 truncate text-[10px] font-semibold text-slate-400">
-              {traffic?.available ? `${traffic.speedMph} mph · ${traffic.label}` : traffic?.label ?? "Loading…"}
-            </p>
-          </a>
-          <div className="px-2.5 py-2">
-            <p className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-violet-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-400" /> Model
-            </p>
-            <p className="mt-0.5 truncate text-[10px] font-semibold text-slate-400">Risk + opportunity</p>
-          </div>
-        </section>
+        <div className="mt-4 grid grid-cols-2 rounded-xl bg-white/[0.06] p-1" role="tablist" aria-label="Parking tools">
+          <button type="button" role="tab" aria-selected={plannerTab === "route"} onClick={() => setPlannerTab("route")} className={`rounded-lg px-3 py-2 text-[11px] font-black transition ${plannerTab === "route" ? "bg-white text-[#101828] shadow-sm" : "text-slate-400 hover:text-white"}`}>Route plan</button>
+          <button type="button" role="tab" aria-selected={plannerTab === "heatmap"} onClick={() => setPlannerTab("heatmap")} className={`rounded-lg px-3 py-2 text-[11px] font-black transition ${plannerTab === "heatmap" ? "bg-white text-[#101828] shadow-sm" : "text-slate-400 hover:text-white"}`}>Enforcement map</button>
+        </div>
+
+        {plannerTab === "heatmap" ? (
+          <section className="mt-3 rounded-2xl border border-violet-300/20 bg-violet-400/[0.08] p-4" aria-label="Hourly enforcement intensity">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-violet-200">Live exploration</p>
+                <h2 className="mt-1 text-sm font-black text-white">{selected.street} by arrival hour</h2>
+              </div>
+              <span className="rounded-full bg-violet-300/15 px-2.5 py-1 text-[10px] font-bold text-violet-100">{formatHour(arrivalHour)} selected</span>
+            </div>
+            <div className="mt-4 grid grid-cols-12 gap-1" aria-label="24 hour citation intensity chart">
+              {hourlyRisk.map(({ hour, risk }) => (
+                <button key={hour} type="button" onClick={() => setArrivalHour(hour)} aria-label={`${formatHour(hour)}: ${risk} risk`} className="group flex min-w-0 flex-col items-center gap-1">
+                  <span className="flex h-16 w-full items-end rounded-md bg-black/20 px-[2px]">
+                    <span className={`w-full rounded-sm transition-all ${hour === arrivalHour ? "bg-[#ff5a3c]" : risk > 66 ? "bg-rose-400" : risk >= 34 ? "bg-amber-300" : "bg-emerald-400"}`} style={{ height: `${Math.max(8, risk)}%` }} />
+                  </span>
+                  <span className={`text-[8px] font-bold ${hour === arrivalHour ? "text-white" : "text-slate-500"}`}>{hour % 2 === 0 ? formatHour(hour).replace("am", "").replace("pm", "") : ""}</span>
+                </button>
+              ))}
+            </div>
+            <p className="mt-3 text-[10px] leading-relaxed text-slate-400">Tap any hour to update the map. Each curb marker is colored by its citation-intensity estimate for that arrival window.</p>
+          </section>
+        ) : (
+          <section className="mt-3 rounded-2xl border border-blue-300/20 bg-blue-400/[0.08] p-3" aria-label="Route-aware parking summary">
+            <div className="flex items-center justify-between gap-3">
+              <div><p className="text-[10px] font-bold uppercase tracking-[0.15em] text-blue-200">Destination-aware ranking</p><p className="mt-1 text-xs font-bold text-white">Walk, meter cost, ticket exposure, and availability in one plan.</p></div>
+              <span className="shrink-0 rounded-full bg-blue-300/15 px-2.5 py-1 text-[10px] font-black text-blue-100">{preferences.maxWalkBlocks} block max</span>
+            </div>
+          </section>
+        )}
 
         <fieldset className="mt-4 md:mt-5">
           <legend className="flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
@@ -434,68 +437,19 @@ export default function TicketDodgeApp() {
           </div>
         </fieldset>
 
-        <section
-          className={`relative mt-3 overflow-hidden rounded-[24px] border p-4 md:p-5 ${
-            decisionIsSearch
-              ? "border-[#ff9d3c]/30 bg-[#ff9d3c]/[0.09]"
-              : "border-emerald-400/25 bg-emerald-400/[0.08]"
-          }`}
-        >
-          <div
-            className={`absolute -right-8 -top-10 h-28 w-28 rounded-full blur-2xl ${
-              decisionIsSearch ? "bg-[#ff9d3c]/15" : "bg-emerald-400/10"
-            }`}
-          />
-          <div className="relative flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <p className={`text-[10px] font-black uppercase tracking-[0.18em] ${decisionIsSearch ? "text-[#ffc27b]" : "text-emerald-300"}`}>
-                Best next move
-              </p>
-              <h2 className="mt-1 text-2xl font-black tracking-[-0.045em] text-white">
-                {decisionIsSearch
-                  ? `Try ${stopRecommendation.betterOption?.entry.street}`
-                  : "Park here"}
-              </h2>
-              <p className="mt-1 max-w-[280px] text-xs font-medium leading-relaxed text-slate-300">
-                {stopRecommendation.message}
-              </p>
-            </div>
-            <span className={`shrink-0 rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-wider ${decisionIsSearch ? "bg-[#ff9d3c]/15 text-[#ffc27b]" : "bg-emerald-400/15 text-emerald-300"}`}>
-              {decisionIsSearch ? "Search" : "Stop"}
-            </span>
-          </div>
-
-          <div className="relative mt-4 grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-white/10 bg-black/15 px-3 py-2.5">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                {decisionIsSearch ? "Modeled reduction" : "Fine at stake"}
-              </p>
-              <p className="mt-0.5 text-xl font-black text-white">${decisionMoney}</p>
-              <p className="text-[9px] font-semibold text-slate-500">
-                {decisionIsSearch ? "estimate" : "NYC schedule"}
-              </p>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-black/15 px-3 py-2.5">
-              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">
-                {decisionIsSearch ? "Next option" : "Circling avoided"}
-              </p>
-              <p className="mt-0.5 text-xl font-black text-white">
-                {decisionIsSearch ? `≈${decisionMinutes}` : `≤${decisionMinutes}`} min
-              </p>
-              <p className="text-[9px] font-semibold text-slate-500">modeled time</p>
-            </div>
-          </div>
-
-          {decisionIsSearch && stopRecommendation.betterOption ? (
-            <button
-              type="button"
-              onClick={() => handleOptionSelect(stopRecommendation.betterOption!.entry.street)}
-              className="relative mt-3 w-full rounded-xl bg-white px-4 py-2.5 text-xs font-black text-[#101828] transition hover:-translate-y-0.5 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#ff9d3c] focus:ring-offset-2 focus:ring-offset-[#101828]"
-            >
-              Show {stopRecommendation.betterOption.entry.street} on map →
-            </button>
-          ) : null}
-        </section>
+        <label className="mt-3 block text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">
+          When do you arrive?
+          <select
+            aria-label="Arrival time"
+            value={arrivalHour}
+            onChange={(event) => setArrivalHour(Number(event.target.value))}
+            className="mt-2 w-full rounded-xl border border-white/10 bg-white/[0.06] px-3 py-2.5 text-sm font-bold normal-case tracking-normal text-white outline-none focus:ring-2 focus:ring-[#ff5a3c]"
+          >
+            {Array.from({ length: 24 }, (_, hour) => (
+              <option key={hour} value={hour} className="bg-[#101828]">{formatHour(hour)}</option>
+            ))}
+          </select>
+        </label>
 
         <section className="mt-4 rounded-[24px] border border-white/10 bg-white/[0.045] p-4 shadow-inner md:mt-5 md:p-5">
           <div className="flex items-center gap-5">
@@ -517,33 +471,79 @@ export default function TicketDodgeApp() {
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-bold uppercase tracking-[0.17em] text-slate-400">Enforcement risk index</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.17em] text-slate-400">Ticket Risk</p>
             <div className="mt-2 flex flex-wrap gap-2">
               <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${riskStyle.pill}`}>
                 {riskStyle.label}
               </span>
               <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-slate-300">
-                {confidence} data depth
+                {confidence} confidence
               </span>
             </div>
             <p className="mt-2 max-w-[210px] text-xs leading-relaxed text-slate-400 md:text-sm">
-              Relative exposure for a {formatDuration(durationMinutes).toLowerCase()} stay—not a ticket probability.
+              Estimated exposure for a {formatDuration(durationMinutes).toLowerCase()} stay.
             </p>
           </div>
           </div>
           <div className="mt-4 flex items-center justify-between gap-4 border-t border-white/10 pt-4">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">Recheck by</p>
-              <p className="mt-1 text-xs font-semibold text-slate-300">{recommendation}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-500">Suggested move time</p>
+              <p className="mt-1 text-sm font-semibold text-slate-300">Based on this parking window</p>
             </div>
             <p className="text-2xl font-black tracking-tight text-white">{safeUntil}</p>
           </div>
         </section>
 
+        <div className="mt-3 rounded-2xl border border-[#ff5a3c]/20 bg-[#ff5a3c]/[0.07] px-4 py-3 md:px-5 md:py-4">
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#ff9d8b]">Recommended next step</p>
+          <p className="mt-1 text-sm font-bold leading-snug text-white md:text-base">{recommendation}</p>
+        </div>
+
+        <section className="mt-3 overflow-hidden rounded-2xl border border-sky-300/20 bg-gradient-to-br from-sky-400/[0.12] to-indigo-400/[0.06]" aria-label="Explainable parking decision">
+          <div className="flex items-start justify-between gap-3 px-4 pb-3 pt-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-sky-200">Decision receipt</p>
+              <h2 className="mt-1 text-sm font-black text-white">See what shaped this call</h2>
+            </div>
+            <button
+              type="button"
+              onClick={handleShareDecision}
+              className="rounded-lg border border-white/15 bg-white/10 px-2.5 py-1.5 text-[10px] font-bold text-white transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            >
+              {shareStatus === "copied" ? "Copied" : shareStatus === "unavailable" ? "Try again" : "Share"}
+            </button>
+          </div>
+          <div className="grid divide-y divide-white/10 border-t border-white/10 bg-[#0b1220]/35">
+            {decisionSignals.map((signal) => (
+              <div key={signal.label} className="flex items-center justify-between gap-4 px-4 py-2.5">
+                <div>
+                  <p className="text-[11px] font-bold text-slate-200">{signal.label}</p>
+                  <p className="mt-0.5 text-[9px] text-slate-400">{signal.note}</p>
+                </div>
+                <span className="shrink-0 text-[11px] font-black text-sky-200">{signal.value}</span>
+              </div>
+            ))}
+          </div>
+          <p className="px-4 py-2.5 text-[9px] leading-relaxed text-slate-400">Transparent estimate, not a guarantee: TicketDodge weighs historical citations, your arrival window, and expected exposure. It never claims access to a live enforcement feed.</p>
+        </section>
+
+        <section className="mt-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.07] p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-300">Park or keep searching?</p>
+              <p className="mt-1 text-sm font-bold leading-snug text-white">{stopRecommendation.message}</p>
+            </div>
+            <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${stopRecommendation.shouldKeepSearching ? "bg-yellow-400/15 text-yellow-200" : "bg-emerald-400/15 text-emerald-300"}`}>
+              {stopRecommendation.shouldKeepSearching ? "Search" : "Park"}
+            </span>
+          </div>
+          <p className="mt-2 text-[10px] leading-relaxed text-slate-400">Optimal-stopping estimate: compares expected savings with the cost of another search loop.</p>
+        </section>
+
         <section className="mt-3 rounded-2xl border border-white/10 bg-black/10 p-4">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xs font-bold text-white">Best nearby curbs</h2>
-            <span className="rounded-full bg-violet-400/10 px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-violet-300">Modeled cost</span>
+            <h2 className="text-xs font-bold text-white">{plannerTab === "route" ? "Route-ranked curbs" : "Curbs at this hour"}</h2>
+            <span className="text-[10px] font-semibold text-slate-500">walk + meter + exposure</span>
           </div>
           <div className="mt-3 space-y-2">
             {parkingOptions.slice(0, 3).map((option, index) => (
@@ -555,28 +555,16 @@ export default function TicketDodgeApp() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="min-w-0"><span className="mr-2 text-[10px] font-black text-emerald-300">#{index + 1}</span><span className="text-xs font-bold text-white">{option.entry.street}</span></span>
-                  <span className="text-sm font-black text-emerald-300">≈${option.totalExpectedCost.toFixed(0)}</span>
+                  <span className="text-sm font-black text-emerald-300">${option.totalExpectedCost.toFixed(0)}</span>
                 </div>
                 <div className="mt-1 flex flex-wrap gap-x-3 text-[10px] font-semibold text-slate-500">
-                  <span>{option.availability}/100 opportunity</span>
-                  <span>{option.ticketRisk}/100 risk</span>
-                  <span>≈{option.searchMinutes} min search</span>
-                  <span>{option.blocksAway} {option.blocksAway === 1 ? "block" : "blocks"}</span>
+                  <span>{option.walkingMinutes} min walk</span><span>{option.availability}% open</span><span>{option.ticketRisk}% ticket risk</span>
                 </div>
               </button>
             ))}
           </div>
-          {parkingOptions.length === 0 ? (
-            <p className="mt-3 rounded-xl bg-white/[0.04] px-3 py-3 text-xs text-slate-400">
-              No modeled curb falls within your current walking limit. Increase it in Parking preferences.
-            </p>
-          ) : null}
-          <p className="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-500">
-            Current curb: {currentOption.availability}/100 opportunity · {currentOption.restriction}. ≈${currentOption.totalExpectedCost.toFixed(0)} combines meter cost, modeled fine/tow exposure, and the time cost of walking or searching.
-          </p>
-          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">
-            Opportunity is an estimate from citation intensity and time-of-day pressure. The NYC DOT speed snapshot adjusts search time only; it does not change ticket risk.
-          </p>
+          <p className="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-500">Current curb: {currentOption.availability}% estimated open · {currentOption.restriction}. ${currentOption.totalExpectedCost.toFixed(0)} = ${currentOption.meterCost.toFixed(0)} meter + ${currentOption.expectedTicketCost.toFixed(0)} ticket risk + ${currentOption.expectedTowCost.toFixed(0)} tow exposure + walking/search time.</p>
+          <p className="mt-1 text-[9px] leading-relaxed text-slate-600">Availability combines historical citation activity with a meter-occupancy proxy.{parkingContext ? ` Live inputs: ${parkingContext.weather.temperatureF ?? "—"}°F, ${parkingContext.traffic.medianMph ?? "—"} mph traffic, ${parkingContext.events.activeOrUpcoming} active Manhattan events.` : " Loading live weather, traffic, and event inputs…"}</p>
         </section>
 
         <details className="mt-3 rounded-2xl border border-white/10 bg-black/10 px-4 py-3">
@@ -602,7 +590,7 @@ export default function TicketDodgeApp() {
               Why this score
             </h2>
             <span className="rounded-full bg-white/[0.06] px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-slate-500">
-              Model
+              Heuristic
             </span>
           </div>
           <div className="mt-3 space-y-3">
@@ -625,10 +613,7 @@ export default function TicketDodgeApp() {
 
         <details className="mt-3 rounded-2xl border border-white/10 bg-black/10 px-4 py-3">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-xs font-bold text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ff5a3c]">
-            <span className="flex items-center gap-2">
-              Historical context
-              <span className="rounded-full bg-emerald-400/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-wider text-emerald-300">NYC data</span>
-            </span>
+            Historical context
             <span className="text-base text-slate-500" aria-hidden="true">⌄</span>
           </summary>
           <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-white/10 pt-4">
@@ -644,7 +629,7 @@ export default function TicketDodgeApp() {
               <dt className="text-[10px] font-bold uppercase tracking-[0.13em] text-slate-500">Most common violation</dt>
               <dd className="mt-1 flex items-baseline justify-between gap-3 text-sm font-bold">
                 <span>{selected.topViolation}</span>
-                <span className="shrink-0 text-[#ff9d8b]">${selected.avgFine} scheduled fine</span>
+                <span className="shrink-0 text-[#ff9d8b]">${selected.avgFine} avg.</span>
               </dd>
             </div>
           </dl>
@@ -660,7 +645,7 @@ export default function TicketDodgeApp() {
           >
             NYC Open Data FY2026
           </a>
-          . DOT speeds are the latest public snapshot; opportunity, time, and risk are labeled model outputs. Map points are representative. Always follow posted signs.
+          . Map points are representative and risk remains heuristic. Always follow posted signs.
         </p>
       </aside>
     </main>
