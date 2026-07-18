@@ -292,7 +292,7 @@ export default function TicketDodgeApp() {
         className="absolute left-1/2 top-[72px] z-[1000] w-[calc(100%-32px)] max-w-[460px] -translate-x-1/2 md:left-6 md:top-[84px] md:w-[390px] md:translate-x-0"
         role="search"
       >
-        <div className="flex items-center rounded-2xl bg-white p-1.5 shadow-[0_14px_45px_rgba(16,24,40,0.18)] ring-1 ring-slate-900/5 transition focus-within:ring-2 focus-within:ring-[#ff5a3c]/60">
+        <div className="flex items-center rounded-2xl bg-white/95 p-1.5 shadow-[0_12px_32px_rgba(23,35,59,0.14)] ring-1 ring-slate-900/5 backdrop-blur transition focus-within:ring-2 focus-within:ring-[#ff5a3c]/60">
           <span className="relative ml-3 h-4 w-4 shrink-0" aria-hidden="true">
             <span className="absolute left-0 top-0 h-3 w-3 rounded-full border-2 border-slate-400" />
             <span className="absolute bottom-0 right-0 h-1.5 w-0.5 rotate-[-45deg] rounded-full bg-slate-400" />
@@ -338,7 +338,7 @@ export default function TicketDodgeApp() {
       </form>
 
       <aside
-        className="risk-panel absolute bottom-0 right-0 z-[1200] h-[54vh] w-full overscroll-contain overflow-y-auto rounded-t-[28px] border-t border-white/10 bg-[#101828] px-5 pb-6 pt-4 text-white shadow-[0_-15px_50px_rgba(16,24,40,0.3)] md:top-0 md:h-full md:w-[420px] md:rounded-none md:border-l md:border-t-0 md:px-8 md:pb-8 md:pt-7 md:shadow-[-18px_0_50px_rgba(16,24,40,0.16)]"
+        className="risk-panel absolute bottom-0 right-0 z-[1200] h-[54vh] w-full overscroll-contain overflow-y-auto rounded-t-[28px] border-t border-white/15 bg-[#17233b] px-5 pb-6 pt-4 text-white shadow-[0_-15px_42px_rgba(23,35,59,0.2)] md:top-0 md:h-full md:w-[420px] md:rounded-none md:border-l md:border-t-0 md:px-8 md:pb-8 md:pt-7 md:shadow-[-18px_0_42px_rgba(23,35,59,0.12)]"
         aria-live="polite"
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20 md:hidden" />
