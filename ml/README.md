@@ -46,3 +46,21 @@ For the hackathon, the trainable NYC ML feature is citation-intensity forecastin
 `CitationGraphFormer` is the NYC-native model to train first. It uses a graph-temporal encoder and a zero-inflated negative-binomial output head to predict the full distribution of citations for every street-segment/time cell. That is important because citation counts are both sparse and bursty; a plain regression would systematically understate enforcement spikes.
 
 Target: `citation_count` per `(street_segment_id, 15-minute window)`. Features: historical citation lags, weekday/holiday, time window, violation/restriction class, weather, NYC DOT traffic speed, nearby permitted-event count, meter rate, and parking-sign attributes. Report held-out time-split negative log likelihood, MAE, peak-period recall, and calibration—not an unsupported probability that a specific driver gets a ticket.
+
+## Validation gate
+
+Keep the most recent contiguous time period completely out of training and
+export its forecast parameters to a CSV with `citation_count`,
+`zero_probability`, `mean`, and `dispersion` columns. The validation command
+then produces a JSON-ready report with ZINB negative log likelihood, MAE,
+zero-rate comparison, and aggregate peak-period recall:
+
+```bash
+cd ml
+PYTHONPATH=src python scripts/validate_citation_forecast.py held_out_forecasts.csv
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+This is an offline model-quality gate. The output measures citation intensity
+at segment/time-cell level and must not be presented as an individual's chance
+of receiving a ticket.
