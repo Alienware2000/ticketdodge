@@ -338,7 +338,7 @@ export default function TicketDodgeApp() {
       </form>
 
       <aside
-        className="risk-panel absolute bottom-0 right-0 z-[1200] h-[54vh] w-full overscroll-contain overflow-y-auto rounded-t-[28px] border-t border-white/15 bg-[#17233b] px-5 pb-6 pt-4 text-white shadow-[0_-15px_42px_rgba(23,35,59,0.2)] md:top-0 md:h-full md:w-[420px] md:rounded-none md:border-l md:border-t-0 md:px-8 md:pb-8 md:pt-7 md:shadow-[-18px_0_42px_rgba(23,35,59,0.12)]"
+        className="risk-panel absolute bottom-0 right-0 z-[1200] h-[54vh] w-full overscroll-contain overflow-y-auto rounded-t-[28px] border-t border-white/15 bg-[#2c1934] px-5 pb-6 pt-4 text-white shadow-[0_-15px_42px_rgba(81,42,67,0.24)] md:top-0 md:h-full md:w-[420px] md:rounded-none md:border-l md:border-t-0 md:px-8 md:pb-8 md:pt-7 md:shadow-[-18px_0_42px_rgba(81,42,67,0.18)]"
         aria-live="polite"
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/20 md:hidden" />
