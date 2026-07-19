@@ -1,11 +1,9 @@
-@import "leaflet/dist/leaflet.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ebe8df;
+  --background: #eceae3;
   --foreground: #101828;
 }
 
@@ -23,7 +21,7 @@ body {
   margin: 0;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 button,
@@ -31,158 +29,55 @@ input {
   font: inherit;
 }
 
-.leaflet-container {
-  height: 100%;
-  width: 100%;
-  background: #e7e2d7;
-  font-family: inherit;
-}
-
-.leaflet-tile-pane {
-  filter: saturate(0.74) contrast(0.94) brightness(1.04);
-}
-
-.leaflet-control-attribution {
-  margin-right: 430px !important;
-  border-radius: 8px 0 0 0;
-  color: #475467;
-}
-
-.leaflet-control-attribution a {
-  color: #344054;
-}
-
-.leaflet-control-zoom {
-  overflow: hidden;
-  border: 0 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 8px 30px rgb(16 24 40 / 16%) !important;
-}
-
-.leaflet-control-zoom a {
-  border: 0 !important;
-  color: #101828 !important;
-}
-
-.leaflet-tooltip.ticket-label {
-  border: 0;
-  border-radius: 999px;
-  background: #101828;
-  color: white;
-  padding: 7px 11px;
-  font-weight: 700;
-  box-shadow: 0 5px 18px rgb(16 24 40 / 24%);
-}
-
-.leaflet-tooltip-top.ticket-label::before {
-  border-top-color: #101828;
-}
-
-.user-location-marker {
+/* Status swatch — colour is doubled with an icon glyph and a shape so the
+   status survives colour-blindness (WCAG 1.4.1: never colour alone). */
+.tone-swatch {
   position: relative;
-  border: 0;
-  background: transparent;
+  border-radius: 3px;
+  line-height: 1;
 }
 
-.user-location-pulse,
-.user-location-dot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
+.tone-glyph {
   display: block;
-  border-radius: 999px;
-  transform: translate(-50%, -50%);
 }
 
-.user-location-pulse {
-  height: 24px;
-  width: 24px;
-  background: rgb(59 130 246 / 35%);
-  animation: user-location-pulse 1.8s ease-out infinite;
+.tone-circle {
+  border-radius: 9999px;
 }
 
-.user-location-dot {
-  height: 13px;
-  width: 13px;
-  border: 3px solid white;
-  background: #3b82f6;
-  box-shadow: 0 3px 10px rgb(16 24 40 / 35%);
+.tone-square {
+  border-radius: 3px;
 }
 
-.leaflet-tooltip.you-label {
-  border: 0;
-  border-radius: 999px;
-  background: #2563eb;
-  color: white;
-  padding: 6px 10px;
-  font-size: 11px;
-  font-weight: 800;
-  box-shadow: 0 5px 18px rgb(37 99 235 / 25%);
+.tone-diamond {
+  border-radius: 2px;
+  transform: rotate(45deg);
 }
 
-.leaflet-tooltip-top.you-label::before {
-  border-top-color: #2563eb;
+.tone-diamond .tone-glyph {
+  transform: rotate(-45deg);
 }
 
-@keyframes user-location-pulse {
-  0% {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(0.65);
-  }
-  75%,
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(2.1);
-  }
-}
-
-.map-vignette {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 500;
-  box-shadow: inset 0 0 90px rgb(16 24 40 / 7%);
-}
-
-.score-ring {
-  --score-color: #ff5a3c;
-  --score-value: 75%;
-  background: conic-gradient(
-    var(--score-color) var(--score-value),
-    rgb(255 255 255 / 10%) 0
-  );
+.tone-triangle {
+  clip-path: polygon(50% 6%, 94% 94%, 6% 94%);
 }
 
 .risk-panel {
-  scrollbar-color: rgb(255 255 255 / 18%) transparent;
+  scrollbar-color: rgb(255 255 255 / 22%) transparent;
   scrollbar-width: thin;
 }
 
-.risk-panel::-webkit-scrollbar {
+.risk-panel ::-webkit-scrollbar {
   width: 6px;
 }
 
-.risk-panel::-webkit-scrollbar-thumb {
+.risk-panel ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgb(255 255 255 / 16%);
+  background: rgb(255 255 255 / 20%);
 }
 
 details > summary::-webkit-details-marker {
   display: none;
-}
-
-@media (max-width: 767px) {
-  .leaflet-control-attribution {
-    display: none;
-  }
-
-  .leaflet-bottom {
-    bottom: 54vh;
-  }
-
-  .leaflet-control-zoom {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

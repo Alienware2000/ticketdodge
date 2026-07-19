@@ -1,67 +1,131 @@
-import { getNearestViolation, violations } from "@/lib/data";
+import {
+  formatHour,
+  segments,
+  type Segment,
+  type SegmentStatus,
+  type StatusTone,
+} from "@/lib/segments";
 
-const getNormalizedCount = (count: number) => {
-  const counts = violations.map((entry) => entry.count);
-  const minimum = Math.min(...counts);
-  const maximum = Math.max(...counts);
+const counts = segments.map((entry) => entry.count);
+const MIN_COUNT = Math.min(...counts);
+const MAX_COUNT = Math.max(...counts);
 
-  if (maximum === minimum) return count > 0 ? 100 : 0;
-  return Math.round(((count - minimum) / (maximum - minimum)) * 100);
-};
+function normalizedCount(count: number) {
+  if (MAX_COUNT === MIN_COUNT) return count > 0 ? 100 : 0;
+  return Math.round(((count - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) * 100);
+}
 
-const getHourDifference = (a: number, b: number) => {
-  const difference = Math.abs(a - b);
-  return Math.min(difference, 24 - difference);
+/**
+ * 0–100 ticket-risk for a segment given its live status and the intended stay.
+ * Enforcement history sets the base rate; the current regulation status
+ * dominates — an active No Standing is near-certain, a legal meter is low.
+ */
+export function getSegmentRisk(
+  segment: Segment,
+  status: SegmentStatus,
+  durationMinutes: number,
+) {
+  const hourly = normalizedCount(segment.count) / 100;
+  const exposure = Math.max(0.25, durationMinutes / 60);
+  let risk = 1 - (1 - hourly) ** exposure;
+
+  switch (status.tone) {
+    case "red":
+      risk = Math.max(risk, 0.9);
+      break;
+    case "yellow":
+      risk = Math.max(risk * 0.9, 0.5);
+      break;
+    case "blue":
+      risk *= 0.55; // paying the meter removes most exposure
+      break;
+    case "green":
+      risk *= 0.45;
+      break;
+  }
+
+  return Math.round(Math.min(1, risk) * 100);
+}
+
+export type Verdict = {
+  tone: StatusTone;
+  headline: string;
+  sub: string;
 };
 
 /**
- * Returns a 0–100 risk score for the closest matching street and time window.
- * Counts are min/max normalized across the current violations dataset.
+ * Leads with a plain-language verdict; the numeric score is demoted to support.
  */
-export function getRisk(
-  lat: number,
-  lng: number,
-  day: string,
-  hour: number,
-  durationMinutes = 60,
-) {
-  const match = getNearestViolation(lat, lng, day, hour);
-  const hourlyRisk = getNormalizedCount(match.count) / 100;
-  const exposureHours = durationMinutes / 60;
-  const adjustedRisk = 1 - (1 - hourlyRisk) ** exposureHours;
-
-  return Math.round(adjustedRisk * 100);
+export function getVerdict(
+  score: number,
+  status: SegmentStatus,
+  safeUntil: string,
+): Verdict {
+  if (status.tone === "red") {
+    return {
+      tone: "red",
+      headline: "High risk — likely ticket within minutes",
+      sub: status.detail,
+    };
+  }
+  if (status.tone === "yellow") {
+    return {
+      tone: "yellow",
+      headline: `Park briefly — restriction starts ${status.changesAt != null ? `at ${formatHour(status.changesAt)}` : "soon"}`,
+      sub: status.detail,
+    };
+  }
+  if (status.tone === "blue") {
+    return {
+      tone: "blue",
+      headline: "Metered — low risk if you pay",
+      sub: `${status.detail} Skipping the meter is the likely ticket here.`,
+    };
+  }
+  // Legal now — the score reflects how heavily this curb is historically ticketed.
+  if (score > 66) {
+    return {
+      tone: "red",
+      headline: "High risk — likely ticket within ~90 min",
+      sub: "Legal right now, but heavily enforced here. Move on soon.",
+    };
+  }
+  if (score >= 34) {
+    return {
+      tone: "yellow",
+      headline: `Moderate risk — recheck by ${safeUntil}`,
+      sub: "Legal now, but this curb gets ticketed often — keep an eye on the time.",
+    };
+  }
+  return {
+    tone: "green",
+    headline: "Low risk — you're clear for now",
+    sub: status.detail,
+  };
 }
 
 export function getRiskBreakdown(
-  lat: number,
-  lng: number,
-  day: string,
-  hour: number,
+  segment: Segment,
+  status: SegmentStatus,
   durationMinutes: number,
 ) {
-  const match = getNearestViolation(lat, lng, day, hour);
-  const hourDifference = getHourDifference(match.hour, hour);
-  const sameDay = match.day === day;
-  const timeStrength = Math.max(
-    10,
-    Math.round((sameDay ? 100 : 58) - hourDifference * (sameDay ? 7 : 3)),
-  );
+  const statusStrength =
+    status.tone === "red" ? 100 : status.tone === "yellow" ? 62 : status.tone === "blue" ? 34 : 16;
 
   return [
     {
-      label: "Enforcement history",
-      detail: `${match.count.toLocaleString()} nearby tickets`,
-      strength: getNormalizedCount(match.count),
+      label: "Current regulation",
+      detail: status.label,
+      strength: statusStrength,
     },
     {
-      label: "Time overlap",
-      detail: `Peak ${match.day.slice(0, 3)} at ${formatHour(match.hour)}`,
-      strength: timeStrength,
+      label: "Enforcement history",
+      detail: `${segment.count.toLocaleString()} nearby tickets`,
+      strength: normalizedCount(segment.count),
     },
     {
       label: "Parking exposure",
-      detail: formatDuration(durationMinutes),
+      detail: durationMinutes < 60 ? `${durationMinutes} min` : `${durationMinutes / 60} hr`,
       strength: Math.min(100, Math.round((durationMinutes / 120) * 100)),
     },
   ];
@@ -71,53 +135,4 @@ export function getConfidence(count: number) {
   if (count >= 10_000) return "High";
   if (count >= 5_000) return "Medium";
   return "Low";
-}
-
-export function getSaferAlternative(
-  lat: number,
-  lng: number,
-  day: string,
-  hour: number,
-  durationMinutes: number,
-) {
-  const current = getNearestViolation(lat, lng, day, hour);
-  const currentRisk = getRisk(lat, lng, day, hour, durationMinutes);
-  const longitudeScale = 111_000 * Math.cos((lat * Math.PI) / 180);
-
-  const alternatives = violations
-    .filter((entry) => entry.street !== current.street)
-    .map((entry) => {
-      const northSouthMeters = (entry.lat - lat) * 111_000;
-      const eastWestMeters = (entry.lng - lng) * longitudeScale;
-      const distanceMeters = Math.hypot(northSouthMeters, eastWestMeters);
-      const score = getRisk(
-        entry.lat,
-        entry.lng,
-        day,
-        hour,
-        durationMinutes,
-      );
-
-      return { entry, score, distanceMeters };
-    })
-    .filter(({ score }) => score < currentRisk)
-    .sort((a, b) => a.distanceMeters - b.distanceMeters);
-
-  const alternative = alternatives[0];
-  if (!alternative) return null;
-
-  return {
-    ...alternative,
-    blocksAway: Math.max(1, Math.round(alternative.distanceMeters / 90)),
-  };
-}
-
-function formatHour(hour: number) {
-  const normalized = hour % 24;
-  return `${normalized % 12 || 12}${normalized >= 12 ? "pm" : "am"}`;
-}
-
-function formatDuration(durationMinutes: number) {
-  if (durationMinutes < 60) return `${durationMinutes} minutes`;
-  return `${durationMinutes / 60} ${durationMinutes === 60 ? "hour" : "hours"}`;
 }

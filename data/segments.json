@@ -1,0 +1,4050 @@
+[
+  {
+    "id": "6thAve-18-19-W",
+    "pairId": "6thAve-18-19",
+    "street": "6th Ave",
+    "fromCross": "W 18th St",
+    "toCross": "W 19th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "6th Ave between W 18th & W 19th — west side",
+    "coords": [
+      [
+        40.73925,
+        -73.995227
+      ],
+      [
+        40.739888,
+        -73.99476
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 3220,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-18-19-E",
+    "pairId": "6thAve-18-19",
+    "street": "6th Ave",
+    "fromCross": "W 18th St",
+    "toCross": "W 19th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "6th Ave between W 18th & W 19th — east side",
+    "coords": [
+      [
+        40.739189,
+        -73.995082
+      ],
+      [
+        40.739827,
+        -73.994615
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3408,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-19-20-W",
+    "pairId": "6thAve-19-20",
+    "street": "6th Ave",
+    "fromCross": "W 19th St",
+    "toCross": "W 20th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "6th Ave between W 19th & W 20th — west side",
+    "coords": [
+      [
+        40.739888,
+        -73.99476
+      ],
+      [
+        40.740526,
+        -73.994293
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 5374,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-19-20-E",
+    "pairId": "6thAve-19-20",
+    "street": "6th Ave",
+    "fromCross": "W 19th St",
+    "toCross": "W 20th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "6th Ave between W 19th & W 20th — east side",
+    "coords": [
+      [
+        40.739827,
+        -73.994615
+      ],
+      [
+        40.740465,
+        -73.994148
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3316,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-20-21-W",
+    "pairId": "6thAve-20-21",
+    "street": "6th Ave",
+    "fromCross": "W 20th St",
+    "toCross": "W 21st St",
+    "side": "west",
+    "axis": "ns",
+    "label": "6th Ave between W 20th & W 21st — west side",
+    "coords": [
+      [
+        40.740526,
+        -73.994293
+      ],
+      [
+        40.741164,
+        -73.993827
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 2361,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-20-21-E",
+    "pairId": "6thAve-20-21",
+    "street": "6th Ave",
+    "fromCross": "W 20th St",
+    "toCross": "W 21st St",
+    "side": "east",
+    "axis": "ns",
+    "label": "6th Ave between W 20th & W 21st — east side",
+    "coords": [
+      [
+        40.740465,
+        -73.994148
+      ],
+      [
+        40.741103,
+        -73.993681
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 3939,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-21-22-W",
+    "pairId": "6thAve-21-22",
+    "street": "6th Ave",
+    "fromCross": "W 21st St",
+    "toCross": "W 22nd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "6th Ave between W 21st & W 22nd — west side",
+    "coords": [
+      [
+        40.741164,
+        -73.993827
+      ],
+      [
+        40.741803,
+        -73.99336
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 2611,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-21-22-E",
+    "pairId": "6thAve-21-22",
+    "street": "6th Ave",
+    "fromCross": "W 21st St",
+    "toCross": "W 22nd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "6th Ave between W 21st & W 22nd — east side",
+    "coords": [
+      [
+        40.741103,
+        -73.993681
+      ],
+      [
+        40.741741,
+        -73.993214
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 4360,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-22-23-W",
+    "pairId": "6thAve-22-23",
+    "street": "6th Ave",
+    "fromCross": "W 22nd St",
+    "toCross": "W 23rd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "6th Ave between W 22nd & W 23rd — west side",
+    "coords": [
+      [
+        40.741803,
+        -73.99336
+      ],
+      [
+        40.742441,
+        -73.992893
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 13271,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-22-23-E",
+    "pairId": "6thAve-22-23",
+    "street": "6th Ave",
+    "fromCross": "W 22nd St",
+    "toCross": "W 23rd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "6th Ave between W 22nd & W 23rd — east side",
+    "coords": [
+      [
+        40.741741,
+        -73.993214
+      ],
+      [
+        40.74238,
+        -73.992747
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 12105,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "6thAve-23-24-W",
+    "pairId": "6thAve-23-24",
+    "street": "6th Ave",
+    "fromCross": "W 23rd St",
+    "toCross": "W 24th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "6th Ave between W 23rd & W 24th — west side",
+    "coords": [
+      [
+        40.742441,
+        -73.992893
+      ],
+      [
+        40.743079,
+        -73.992426
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 6239,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "6thAve-23-24-E",
+    "pairId": "6thAve-23-24",
+    "street": "6th Ave",
+    "fromCross": "W 23rd St",
+    "toCross": "W 24th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "6th Ave between W 23rd & W 24th — east side",
+    "coords": [
+      [
+        40.74238,
+        -73.992747
+      ],
+      [
+        40.743018,
+        -73.99228
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 4765,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "5thAve-18-19-W",
+    "pairId": "5thAve-18-19",
+    "street": "5th Ave",
+    "fromCross": "W 18th St",
+    "toCross": "W 19th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "5th Ave between W 18th & W 19th — west side",
+    "coords": [
+      [
+        40.738595,
+        -73.993667
+      ],
+      [
+        40.739233,
+        -73.9932
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 4345,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-18-19-E",
+    "pairId": "5thAve-18-19",
+    "street": "5th Ave",
+    "fromCross": "E 18th St",
+    "toCross": "E 19th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "5th Ave between E 18th & E 19th — east side",
+    "coords": [
+      [
+        40.738533,
+        -73.993522
+      ],
+      [
+        40.739172,
+        -73.993055
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 4707,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-19-20-W",
+    "pairId": "5thAve-19-20",
+    "street": "5th Ave",
+    "fromCross": "W 19th St",
+    "toCross": "W 20th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "5th Ave between W 19th & W 20th — west side",
+    "coords": [
+      [
+        40.739233,
+        -73.9932
+      ],
+      [
+        40.739871,
+        -73.992734
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 4493,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-19-20-E",
+    "pairId": "5thAve-19-20",
+    "street": "5th Ave",
+    "fromCross": "E 19th St",
+    "toCross": "E 20th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "5th Ave between E 19th & E 20th — east side",
+    "coords": [
+      [
+        40.739172,
+        -73.993055
+      ],
+      [
+        40.73981,
+        -73.992588
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3988,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-20-21-W",
+    "pairId": "5thAve-20-21",
+    "street": "5th Ave",
+    "fromCross": "W 20th St",
+    "toCross": "W 21st St",
+    "side": "west",
+    "axis": "ns",
+    "label": "5th Ave between W 20th & W 21st — west side",
+    "coords": [
+      [
+        40.739871,
+        -73.992734
+      ],
+      [
+        40.740509,
+        -73.992267
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3958,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-20-21-E",
+    "pairId": "5thAve-20-21",
+    "street": "5th Ave",
+    "fromCross": "E 20th St",
+    "toCross": "E 21st St",
+    "side": "east",
+    "axis": "ns",
+    "label": "5th Ave between E 20th & E 21st — east side",
+    "coords": [
+      [
+        40.73981,
+        -73.992588
+      ],
+      [
+        40.740448,
+        -73.992121
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 5002,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-21-22-W",
+    "pairId": "5thAve-21-22",
+    "street": "5th Ave",
+    "fromCross": "W 21st St",
+    "toCross": "W 22nd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "5th Ave between W 21st & W 22nd — west side",
+    "coords": [
+      [
+        40.740509,
+        -73.992267
+      ],
+      [
+        40.741147,
+        -73.9918
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 2515,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-21-22-E",
+    "pairId": "5thAve-21-22",
+    "street": "5th Ave",
+    "fromCross": "E 21st St",
+    "toCross": "E 22nd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "5th Ave between E 21st & E 22nd — east side",
+    "coords": [
+      [
+        40.740448,
+        -73.992121
+      ],
+      [
+        40.741086,
+        -73.991654
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 5121,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-22-23-W",
+    "pairId": "5thAve-22-23",
+    "street": "5th Ave",
+    "fromCross": "W 22nd St",
+    "toCross": "W 23rd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "5th Ave between W 22nd & W 23rd — west side",
+    "coords": [
+      [
+        40.741147,
+        -73.9918
+      ],
+      [
+        40.741786,
+        -73.991333
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 15052,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-22-23-E",
+    "pairId": "5thAve-22-23",
+    "street": "5th Ave",
+    "fromCross": "E 22nd St",
+    "toCross": "E 23rd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "5th Ave between E 22nd & E 23rd — east side",
+    "coords": [
+      [
+        40.741086,
+        -73.991654
+      ],
+      [
+        40.741725,
+        -73.991187
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 13046,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-23-24-W",
+    "pairId": "5thAve-23-24",
+    "street": "5th Ave",
+    "fromCross": "W 23rd St",
+    "toCross": "W 24th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "5th Ave between W 23rd & W 24th — west side",
+    "coords": [
+      [
+        40.741786,
+        -73.991333
+      ],
+      [
+        40.742424,
+        -73.990866
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 16418,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "5thAve-23-24-E",
+    "pairId": "5thAve-23-24",
+    "street": "5th Ave",
+    "fromCross": "E 23rd St",
+    "toCross": "E 24th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "5th Ave between E 23rd & E 24th — east side",
+    "coords": [
+      [
+        40.741725,
+        -73.991187
+      ],
+      [
+        40.742363,
+        -73.99072
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 16617,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "Broadway-18-19-W",
+    "pairId": "Broadway-18-19",
+    "street": "Broadway",
+    "fromCross": "E 18th St",
+    "toCross": "E 19th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Broadway between E 18th & E 19th — west side",
+    "coords": [
+      [
+        40.737939,
+        -73.992107
+      ],
+      [
+        40.738578,
+        -73.991641
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 4705,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "Broadway-18-19-E",
+    "pairId": "Broadway-18-19",
+    "street": "Broadway",
+    "fromCross": "E 18th St",
+    "toCross": "E 19th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Broadway between E 18th & E 19th — east side",
+    "coords": [
+      [
+        40.737878,
+        -73.991962
+      ],
+      [
+        40.738516,
+        -73.991495
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 7841,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "Broadway-19-20-W",
+    "pairId": "Broadway-19-20",
+    "street": "Broadway",
+    "fromCross": "E 19th St",
+    "toCross": "E 20th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Broadway between E 19th & E 20th — west side",
+    "coords": [
+      [
+        40.738578,
+        -73.991641
+      ],
+      [
+        40.739216,
+        -73.991174
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 3855,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "Broadway-19-20-E",
+    "pairId": "Broadway-19-20",
+    "street": "Broadway",
+    "fromCross": "E 19th St",
+    "toCross": "E 20th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Broadway between E 19th & E 20th — east side",
+    "coords": [
+      [
+        40.738516,
+        -73.991495
+      ],
+      [
+        40.739155,
+        -73.991028
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 5910,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "Broadway-20-21-W",
+    "pairId": "Broadway-20-21",
+    "street": "Broadway",
+    "fromCross": "E 20th St",
+    "toCross": "E 21st St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Broadway between E 20th & E 21st — west side",
+    "coords": [
+      [
+        40.739216,
+        -73.991174
+      ],
+      [
+        40.739854,
+        -73.990707
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3191,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "Broadway-20-21-E",
+    "pairId": "Broadway-20-21",
+    "street": "Broadway",
+    "fromCross": "E 20th St",
+    "toCross": "E 21st St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Broadway between E 20th & E 21st — east side",
+    "coords": [
+      [
+        40.739155,
+        -73.991028
+      ],
+      [
+        40.739793,
+        -73.990561
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 8171,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "Broadway-21-22-W",
+    "pairId": "Broadway-21-22",
+    "street": "Broadway",
+    "fromCross": "E 21st St",
+    "toCross": "E 22nd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Broadway between E 21st & E 22nd — west side",
+    "coords": [
+      [
+        40.739854,
+        -73.990707
+      ],
+      [
+        40.740492,
+        -73.99024
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3630,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "Broadway-21-22-E",
+    "pairId": "Broadway-21-22",
+    "street": "Broadway",
+    "fromCross": "E 21st St",
+    "toCross": "E 22nd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Broadway between E 21st & E 22nd — east side",
+    "coords": [
+      [
+        40.739793,
+        -73.990561
+      ],
+      [
+        40.740431,
+        -73.990094
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 2569,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "Broadway-22-23-W",
+    "pairId": "Broadway-22-23",
+    "street": "Broadway",
+    "fromCross": "E 22nd St",
+    "toCross": "E 23rd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Broadway between E 22nd & E 23rd — west side",
+    "coords": [
+      [
+        40.740492,
+        -73.99024
+      ],
+      [
+        40.741131,
+        -73.989773
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 3294,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "Broadway-22-23-E",
+    "pairId": "Broadway-22-23",
+    "street": "Broadway",
+    "fromCross": "E 22nd St",
+    "toCross": "E 23rd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Broadway between E 22nd & E 23rd — east side",
+    "coords": [
+      [
+        40.740431,
+        -73.990094
+      ],
+      [
+        40.741069,
+        -73.989627
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 4121,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "Broadway-23-24-W",
+    "pairId": "Broadway-23-24",
+    "street": "Broadway",
+    "fromCross": "E 23rd St",
+    "toCross": "E 24th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Broadway between E 23rd & E 24th — west side",
+    "coords": [
+      [
+        40.741131,
+        -73.989773
+      ],
+      [
+        40.741769,
+        -73.989306
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 3555,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "Broadway-23-24-E",
+    "pairId": "Broadway-23-24",
+    "street": "Broadway",
+    "fromCross": "E 23rd St",
+    "toCross": "E 24th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Broadway between E 23rd & E 24th — east side",
+    "coords": [
+      [
+        40.741069,
+        -73.989627
+      ],
+      [
+        40.741708,
+        -73.98916
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 3001,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "ParkAveS-18-19-W",
+    "pairId": "ParkAveS-18-19",
+    "street": "Park Ave S",
+    "fromCross": "E 18th St",
+    "toCross": "E 19th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Park Ave S between E 18th & E 19th — west side",
+    "coords": [
+      [
+        40.737284,
+        -73.990548
+      ],
+      [
+        40.737922,
+        -73.990081
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 10488,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-18-19-E",
+    "pairId": "ParkAveS-18-19",
+    "street": "Park Ave S",
+    "fromCross": "E 18th St",
+    "toCross": "E 19th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Park Ave S between E 18th & E 19th — east side",
+    "coords": [
+      [
+        40.737223,
+        -73.990402
+      ],
+      [
+        40.737861,
+        -73.989935
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 5035,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-19-20-W",
+    "pairId": "ParkAveS-19-20",
+    "street": "Park Ave S",
+    "fromCross": "E 19th St",
+    "toCross": "E 20th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Park Ave S between E 19th & E 20th — west side",
+    "coords": [
+      [
+        40.737922,
+        -73.990081
+      ],
+      [
+        40.738561,
+        -73.989614
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 7,
+          "end": 10,
+          "label": "No Standing 7–10a (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 7939,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-19-20-E",
+    "pairId": "ParkAveS-19-20",
+    "street": "Park Ave S",
+    "fromCross": "E 19th St",
+    "toCross": "E 20th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Park Ave S between E 19th & E 20th — east side",
+    "coords": [
+      [
+        40.737861,
+        -73.989935
+      ],
+      [
+        40.7385,
+        -73.989468
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 5935,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-20-21-W",
+    "pairId": "ParkAveS-20-21",
+    "street": "Park Ave S",
+    "fromCross": "E 20th St",
+    "toCross": "E 21st St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Park Ave S between E 20th & E 21st — west side",
+    "coords": [
+      [
+        40.738561,
+        -73.989614
+      ],
+      [
+        40.739199,
+        -73.989147
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 4182,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-20-21-E",
+    "pairId": "ParkAveS-20-21",
+    "street": "Park Ave S",
+    "fromCross": "E 20th St",
+    "toCross": "E 21st St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Park Ave S between E 20th & E 21st — east side",
+    "coords": [
+      [
+        40.7385,
+        -73.989468
+      ],
+      [
+        40.739138,
+        -73.989001
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 6964,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-21-22-W",
+    "pairId": "ParkAveS-21-22",
+    "street": "Park Ave S",
+    "fromCross": "E 21st St",
+    "toCross": "E 22nd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Park Ave S between E 21st & E 22nd — west side",
+    "coords": [
+      [
+        40.739199,
+        -73.989147
+      ],
+      [
+        40.739837,
+        -73.98868
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 6564,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-21-22-E",
+    "pairId": "ParkAveS-21-22",
+    "street": "Park Ave S",
+    "fromCross": "E 21st St",
+    "toCross": "E 22nd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Park Ave S between E 21st & E 22nd — east side",
+    "coords": [
+      [
+        40.739138,
+        -73.989001
+      ],
+      [
+        40.739776,
+        -73.988534
+      ]
+    ],
+    "regulation": {
+      "base": "no_standing_all_day",
+      "meter": null,
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "start": 7,
+          "end": 19,
+          "label": "No Standing 7a–7p"
+        }
+      ]
+    },
+    "count": 3412,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-22-23-W",
+    "pairId": "ParkAveS-22-23",
+    "street": "Park Ave S",
+    "fromCross": "E 22nd St",
+    "toCross": "E 23rd St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Park Ave S between E 22nd & E 23rd — west side",
+    "coords": [
+      [
+        40.739837,
+        -73.98868
+      ],
+      [
+        40.740475,
+        -73.988213
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 4215,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-22-23-E",
+    "pairId": "ParkAveS-22-23",
+    "street": "Park Ave S",
+    "fromCross": "E 22nd St",
+    "toCross": "E 23rd St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Park Ave S between E 22nd & E 23rd — east side",
+    "coords": [
+      [
+        40.739776,
+        -73.988534
+      ],
+      [
+        40.740414,
+        -73.988067
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": []
+    },
+    "count": 6883,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "ParkAveS-23-24-W",
+    "pairId": "ParkAveS-23-24",
+    "street": "Park Ave S",
+    "fromCross": "E 23rd St",
+    "toCross": "E 24th St",
+    "side": "west",
+    "axis": "ns",
+    "label": "Park Ave S between E 23rd & E 24th — west side",
+    "coords": [
+      [
+        40.740475,
+        -73.988213
+      ],
+      [
+        40.741114,
+        -73.987746
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 4823,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "ParkAveS-23-24-E",
+    "pairId": "ParkAveS-23-24",
+    "street": "Park Ave S",
+    "fromCross": "E 23rd St",
+    "toCross": "E 24th St",
+    "side": "east",
+    "axis": "ns",
+    "label": "Park Ave S between E 23rd & E 24th — east side",
+    "coords": [
+      [
+        40.740414,
+        -73.988067
+      ],
+      [
+        40.741053,
+        -73.9876
+      ]
+    ],
+    "regulation": {
+      "base": "commercial_metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 5.5
+      },
+      "rules": [
+        {
+          "type": "no_standing",
+          "days": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "start": 16,
+          "end": 19,
+          "label": "No Standing 4–7p (Mon–Fri)"
+        }
+      ]
+    },
+    "count": 2830,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "W18thSt-6thAve-5thAve-N",
+    "pairId": "W18thSt-6thAve-5thAve",
+    "street": "W 18th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 18th St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.739274,
+        -73.995114
+      ],
+      [
+        40.738619,
+        -73.993554
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 3177,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "W18thSt-6thAve-5thAve-S",
+    "pairId": "W18thSt-6thAve-5thAve",
+    "street": "W 18th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 18th St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.739164,
+        -73.995195
+      ],
+      [
+        40.738509,
+        -73.993635
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 3483,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E18thSt-5thAve-Broadway-N",
+    "pairId": "E18thSt-5thAve-Broadway",
+    "street": "E 18th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 18th St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.738619,
+        -73.993554
+      ],
+      [
+        40.737964,
+        -73.991994
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 2392,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E18thSt-5thAve-Broadway-S",
+    "pairId": "E18thSt-5thAve-Broadway",
+    "street": "E 18th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 18th St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.738509,
+        -73.993635
+      ],
+      [
+        40.737854,
+        -73.992075
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 3091,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E18thSt-Broadway-ParkAveS-N",
+    "pairId": "E18thSt-Broadway-ParkAveS",
+    "street": "E 18th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 18th St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.737964,
+        -73.991994
+      ],
+      [
+        40.737309,
+        -73.990434
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 4114,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "E18thSt-Broadway-ParkAveS-S",
+    "pairId": "E18thSt-Broadway-ParkAveS",
+    "street": "E 18th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 18th St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.737854,
+        -73.992075
+      ],
+      [
+        40.737199,
+        -73.990515
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 3826,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "W19thSt-6thAve-5thAve-N",
+    "pairId": "W19thSt-6thAve-5thAve",
+    "street": "W 19th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 19th St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.739913,
+        -73.994647
+      ],
+      [
+        40.739257,
+        -73.993087
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 3215,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "W19thSt-6thAve-5thAve-S",
+    "pairId": "W19thSt-6thAve-5thAve",
+    "street": "W 19th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 19th St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.739802,
+        -73.994728
+      ],
+      [
+        40.739147,
+        -73.993168
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 4201,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E19thSt-5thAve-Broadway-N",
+    "pairId": "E19thSt-5thAve-Broadway",
+    "street": "E 19th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 19th St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.739257,
+        -73.993087
+      ],
+      [
+        40.738602,
+        -73.991527
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": []
+    },
+    "count": 2841,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E19thSt-5thAve-Broadway-S",
+    "pairId": "E19thSt-5thAve-Broadway",
+    "street": "E 19th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 19th St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.739147,
+        -73.993168
+      ],
+      [
+        40.738492,
+        -73.991608
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 3902,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E19thSt-Broadway-ParkAveS-N",
+    "pairId": "E19thSt-Broadway-ParkAveS",
+    "street": "E 19th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 19th St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.738602,
+        -73.991527
+      ],
+      [
+        40.737947,
+        -73.989967
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 2655,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "E19thSt-Broadway-ParkAveS-S",
+    "pairId": "E19thSt-Broadway-ParkAveS",
+    "street": "E 19th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 19th St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.738492,
+        -73.991608
+      ],
+      [
+        40.737837,
+        -73.990048
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": []
+    },
+    "count": 4340,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "W20thSt-6thAve-5thAve-N",
+    "pairId": "W20thSt-6thAve-5thAve",
+    "street": "W 20th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 20th St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.740551,
+        -73.99418
+      ],
+      [
+        40.739896,
+        -73.99262
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": []
+    },
+    "count": 1844,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "W20thSt-6thAve-5thAve-S",
+    "pairId": "W20thSt-6thAve-5thAve",
+    "street": "W 20th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 20th St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.74044,
+        -73.994261
+      ],
+      [
+        40.739785,
+        -73.992701
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": []
+    },
+    "count": 3926,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E20thSt-5thAve-Broadway-N",
+    "pairId": "E20thSt-5thAve-Broadway",
+    "street": "E 20th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 20th St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.739896,
+        -73.99262
+      ],
+      [
+        40.73924,
+        -73.99106
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 3459,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E20thSt-5thAve-Broadway-S",
+    "pairId": "E20thSt-5thAve-Broadway",
+    "street": "E 20th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 20th St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.739785,
+        -73.992701
+      ],
+      [
+        40.73913,
+        -73.991141
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 2393,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E20thSt-Broadway-ParkAveS-N",
+    "pairId": "E20thSt-Broadway-ParkAveS",
+    "street": "E 20th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 20th St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.73924,
+        -73.99106
+      ],
+      [
+        40.738585,
+        -73.989501
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 4436,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "E20thSt-Broadway-ParkAveS-S",
+    "pairId": "E20thSt-Broadway-ParkAveS",
+    "street": "E 20th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 20th St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.73913,
+        -73.991141
+      ],
+      [
+        40.738475,
+        -73.989581
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 5021,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "W21stSt-6thAve-5thAve-N",
+    "pairId": "W21stSt-6thAve-5thAve",
+    "street": "W 21st St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 21st St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.741189,
+        -73.993713
+      ],
+      [
+        40.740534,
+        -73.992153
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 3028,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "W21stSt-6thAve-5thAve-S",
+    "pairId": "W21stSt-6thAve-5thAve",
+    "street": "W 21st St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 21st St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.741079,
+        -73.993794
+      ],
+      [
+        40.740424,
+        -73.992234
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": []
+    },
+    "count": 3784,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E21stSt-5thAve-Broadway-N",
+    "pairId": "E21stSt-5thAve-Broadway",
+    "street": "E 21st St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 21st St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.740534,
+        -73.992153
+      ],
+      [
+        40.739879,
+        -73.990594
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": []
+    },
+    "count": 3777,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E21stSt-5thAve-Broadway-S",
+    "pairId": "E21stSt-5thAve-Broadway",
+    "street": "E 21st St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 21st St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.740424,
+        -73.992234
+      ],
+      [
+        40.739768,
+        -73.990674
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 3093,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E21stSt-Broadway-ParkAveS-N",
+    "pairId": "E21stSt-Broadway-ParkAveS",
+    "street": "E 21st St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 21st St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.739879,
+        -73.990594
+      ],
+      [
+        40.739224,
+        -73.989034
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 2707,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "E21stSt-Broadway-ParkAveS-S",
+    "pairId": "E21stSt-Broadway-ParkAveS",
+    "street": "E 21st St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 21st St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.739768,
+        -73.990674
+      ],
+      [
+        40.739113,
+        -73.989114
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 2898,
+    "avgFine": 65,
+    "topViolation": "Meter Receipt Not Displayed"
+  },
+  {
+    "id": "W22ndSt-6thAve-5thAve-N",
+    "pairId": "W22ndSt-6thAve-5thAve",
+    "street": "W 22nd St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 22nd St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.741827,
+        -73.993246
+      ],
+      [
+        40.741172,
+        -73.991687
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 10702,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "W22ndSt-6thAve-5thAve-S",
+    "pairId": "W22ndSt-6thAve-5thAve",
+    "street": "W 22nd St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 22nd St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.741717,
+        -73.993327
+      ],
+      [
+        40.741062,
+        -73.991767
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 15743,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E22ndSt-5thAve-Broadway-N",
+    "pairId": "E22ndSt-5thAve-Broadway",
+    "street": "E 22nd St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 22nd St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.741172,
+        -73.991687
+      ],
+      [
+        40.740517,
+        -73.990127
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 11001,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E22ndSt-5thAve-Broadway-S",
+    "pairId": "E22ndSt-5thAve-Broadway",
+    "street": "E 22nd St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 22nd St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.741062,
+        -73.991767
+      ],
+      [
+        40.740407,
+        -73.990207
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 13402,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E22ndSt-Broadway-ParkAveS-N",
+    "pairId": "E22ndSt-Broadway-ParkAveS",
+    "street": "E 22nd St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 22nd St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.740517,
+        -73.990127
+      ],
+      [
+        40.739862,
+        -73.988567
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 2515,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "E22ndSt-Broadway-ParkAveS-S",
+    "pairId": "E22ndSt-Broadway-ParkAveS",
+    "street": "E 22nd St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 22nd St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.740407,
+        -73.990207
+      ],
+      [
+        40.739751,
+        -73.988647
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 2945,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "W23rdSt-6thAve-5thAve-N",
+    "pairId": "W23rdSt-6thAve-5thAve",
+    "street": "W 23rd St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 23rd St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.742465,
+        -73.99278
+      ],
+      [
+        40.74181,
+        -73.99122
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 7368,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "W23rdSt-6thAve-5thAve-S",
+    "pairId": "W23rdSt-6thAve-5thAve",
+    "street": "W 23rd St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 23rd St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.742355,
+        -73.99286
+      ],
+      [
+        40.7417,
+        -73.9913
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 11906,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E23rdSt-5thAve-Broadway-N",
+    "pairId": "E23rdSt-5thAve-Broadway",
+    "street": "E 23rd St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 23rd St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.74181,
+        -73.99122
+      ],
+      [
+        40.741155,
+        -73.98966
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 8777,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E23rdSt-5thAve-Broadway-S",
+    "pairId": "E23rdSt-5thAve-Broadway",
+    "street": "E 23rd St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 23rd St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.7417,
+        -73.9913
+      ],
+      [
+        40.741045,
+        -73.98974
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 12161,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E23rdSt-Broadway-ParkAveS-N",
+    "pairId": "E23rdSt-Broadway-ParkAveS",
+    "street": "E 23rd St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 23rd St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.741155,
+        -73.98966
+      ],
+      [
+        40.7405,
+        -73.9881
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": []
+    },
+    "count": 3110,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "E23rdSt-Broadway-ParkAveS-S",
+    "pairId": "E23rdSt-Broadway-ParkAveS",
+    "street": "E 23rd St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 23rd St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.741045,
+        -73.98974
+      ],
+      [
+        40.74039,
+        -73.98818
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 1879,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "W24thSt-6thAve-5thAve-N",
+    "pairId": "W24thSt-6thAve-5thAve",
+    "street": "W 24th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "north",
+    "axis": "ew",
+    "label": "W 24th St between 6th Ave & 5th Ave — north side",
+    "coords": [
+      [
+        40.743104,
+        -73.992313
+      ],
+      [
+        40.742449,
+        -73.990753
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 5615,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "W24thSt-6thAve-5thAve-S",
+    "pairId": "W24thSt-6thAve-5thAve",
+    "street": "W 24th St",
+    "fromCross": "6th Ave",
+    "toCross": "5th Ave",
+    "side": "south",
+    "axis": "ew",
+    "label": "W 24th St between 6th Ave & 5th Ave — south side",
+    "coords": [
+      [
+        40.742993,
+        -73.992393
+      ],
+      [
+        40.742338,
+        -73.990833
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 4793,
+    "avgFine": 65,
+    "topViolation": "Commercial Meter Receipt Not Displayed"
+  },
+  {
+    "id": "E24thSt-5thAve-Broadway-N",
+    "pairId": "E24thSt-5thAve-Broadway",
+    "street": "E 24th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 24th St between 5th Ave & Broadway — north side",
+    "coords": [
+      [
+        40.742449,
+        -73.990753
+      ],
+      [
+        40.741793,
+        -73.989193
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            2,
+            5
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 11264,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E24thSt-5thAve-Broadway-S",
+    "pairId": "E24thSt-5thAve-Broadway",
+    "street": "E 24th St",
+    "fromCross": "5th Ave",
+    "toCross": "Broadway",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 24th St between 5th Ave & Broadway — south side",
+    "coords": [
+      [
+        40.742338,
+        -73.990833
+      ],
+      [
+        40.741683,
+        -73.989273
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 8,
+          "end": 9.5,
+          "label": "Street Cleaning 8–9:30a"
+        }
+      ]
+    },
+    "count": 14801,
+    "avgFine": 115,
+    "topViolation": "Commercial Meter Zone"
+  },
+  {
+    "id": "E24thSt-Broadway-ParkAveS-N",
+    "pairId": "E24thSt-Broadway-ParkAveS",
+    "street": "E 24th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "north",
+    "axis": "ew",
+    "label": "E 24th St between Broadway & Park Ave S — north side",
+    "coords": [
+      [
+        40.741793,
+        -73.989193
+      ],
+      [
+        40.741138,
+        -73.987633
+      ]
+    ],
+    "regulation": {
+      "base": "free",
+      "meter": null,
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 1900,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  },
+  {
+    "id": "E24thSt-Broadway-ParkAveS-S",
+    "pairId": "E24thSt-Broadway-ParkAveS",
+    "street": "E 24th St",
+    "fromCross": "Broadway",
+    "toCross": "Park Ave S",
+    "side": "south",
+    "axis": "ew",
+    "label": "E 24th St between Broadway & Park Ave S — south side",
+    "coords": [
+      [
+        40.741683,
+        -73.989273
+      ],
+      [
+        40.741028,
+        -73.987713
+      ]
+    ],
+    "regulation": {
+      "base": "metered",
+      "meter": {
+        "days": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "start": 9,
+        "end": 19,
+        "rate": 4.5
+      },
+      "rules": [
+        {
+          "type": "street_cleaning",
+          "days": [
+            1,
+            4
+          ],
+          "start": 11.5,
+          "end": 13,
+          "label": "Street Cleaning 11:30a–1p"
+        }
+      ]
+    },
+    "count": 3323,
+    "avgFine": 115,
+    "topViolation": "General No Standing"
+  }
+]
